@@ -8,7 +8,7 @@ class MailsterWooCommerce {
 	public function __construct() {
 
 		$this->plugin_path = plugin_dir_path( MAILSTER_WOOCOMMERCE_FILE );
-		$this->plugin_url = plugin_dir_url( MAILSTER_WOOCOMMERCE_FILE );
+		$this->plugin_url  = plugin_dir_url( MAILSTER_WOOCOMMERCE_FILE );
 
 		register_activation_hook( MAILSTER_WOOCOMMERCE_FILE, array( &$this, 'activate' ) );
 		register_deactivation_hook( MAILSTER_WOOCOMMERCE_FILE, array( &$this, 'deactivate' ) );
@@ -49,7 +49,7 @@ class MailsterWooCommerce {
 		add_action( 'woocommerce_checkout_' . mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ), array( &$this, 'checkbox' ) );
 		add_action( 'woocommerce_' . mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ), array( &$this, 'checkbox' ) );
 
-		add_action( 'woocommerce_checkout_update_order_meta',  array( &$this, 'on_checkout' ) );
+		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'on_checkout' ) );
 
 		add_action( 'woocommerce_order_status_completed', array( &$this, 'on_completed' ) );
 
@@ -79,14 +79,17 @@ class MailsterWooCommerce {
 
 	public function get_mailster_settings() {
 
-		return apply_filters( 'woocommerce_mailster_settings', array(
+		return apply_filters(
+			'woocommerce_mailster_settings',
 			array(
-				'title'	=> '',
-				'type'	=> 'title',
-				'desc' 	=> '',
-			),
-			array( 'type' => 'sectionend' ),
-		));
+				array(
+					'title' => '',
+					'type'  => 'title',
+					'desc'  => '',
+				),
+				array( 'type' => 'sectionend' ),
+			)
+		);
 	}
 
 	public function mailster_lists() {
@@ -120,7 +123,7 @@ class MailsterWooCommerce {
 
 	public function add_mailster_product_metabox() {
 
-		add_meta_box( 'mailster_product_metabox','Mailster', array( &$this, 'mailster_product_metabox' ),'product', 'side', 'core' );
+		add_meta_box( 'mailster_product_metabox', 'Mailster', array( &$this, 'mailster_product_metabox' ), 'product', 'side', 'core' );
 	}
 
 	public function mailster_product_metabox( $post ) {
@@ -132,13 +135,13 @@ class MailsterWooCommerce {
 			$selected_lists = mailster_option( 'woocommerce_lists' );
 		}
 
-	?>
+		?>
 		<?php mailster( 'lists' )->print_it( null, null, 'mailster_lists', false, $selected_lists ); ?>
 		<p class="description">
 			<?php _e( 'Customers who purchases this product will get added to these lists', 'mailster-woocommerce' ); ?>
 		</p>
 
-	<?php
+		<?php
 	}
 
 	public function save_product( $post_id, $post ) {
@@ -156,7 +159,7 @@ class MailsterWooCommerce {
 		}
 
 		if ( ! wp_verify_nonce( $_POST['mailster_woocommerce_lists_nonce'], 'mailster_woocommerce_lists_nonce' ) ) {
-			return ;
+			return;
 		}
 
 		$lists = isset( $_POST['mailster_lists'] ) ? (array) $_POST['mailster_lists'] : array();
@@ -179,7 +182,7 @@ class MailsterWooCommerce {
 
 	public function on_checkout( $order_id ) {
 
-		if ( ('checkbox' == mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ))
+		if ( ( 'checkbox' == mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ) )
 			|| 'auto' == mailster_option( 'woocommerce_type' ) ) {
 
 			if ( 'completed' == mailster_option( 'woocommerce_action' ) ) {
@@ -212,9 +215,9 @@ class MailsterWooCommerce {
 
 		$default_lists = mailster_option( 'woocommerce_lists', array() );
 
-		$email = $order->billing_email;
+		$email     = $order->billing_email;
 		$firstname = $order->billing_first_name;
-		$lastname = $order->billing_last_name;
+		$lastname  = $order->billing_last_name;
 
 		foreach ( $order->get_items() as $item ) {
 
@@ -231,10 +234,10 @@ class MailsterWooCommerce {
 
 			$user_data = array(
 				'firstname' => $firstname,
-				'lastname' => $lastname,
-				'email' => $email,
-				'referer' => sprintf( '<a href="' . admin_url( 'post.php?post=%d&action=edit' ) . '">%s #%d</a>', $order->id, __( 'Order', 'mailster-woocommerce' ), $order->id ),
-				'status' => mailster_options( 'woocommerce-double-opt-in' ) ? 0 : 1,
+				'lastname'  => $lastname,
+				'email'     => $email,
+				'referer'   => sprintf( '<a href="' . admin_url( 'post.php?post=%d&action=edit' ) . '">%s #%d</a>', $order->id, __( 'Order', 'mailster-woocommerce' ), $order->id ),
+				'status'    => mailster_options( 'woocommerce-double-opt-in' ) ? 0 : 1,
 			);
 
 			$synclist = mailster_option( 'sync' ) ? mailster_option( 'synclist', array() ) : array();
@@ -248,7 +251,7 @@ class MailsterWooCommerce {
 		}
 
 		if ( ! empty( $default_lists ) && ! is_wp_error( $subscriber_id ) ) {
-			$lists = array_unique( $default_lists );
+			$lists   = array_unique( $default_lists );
 			$success = mailster( 'subscribers' )->assign_lists( $subscriber_id, $lists, false );
 		}
 	}
@@ -271,7 +274,7 @@ class MailsterWooCommerce {
 
 	public function set_template( $file, $caller, $current_filter ) {
 
-		$default = $file;
+		$default   = $file;
 		$templates = mailster_option( 'woocommerce_templates', array() );
 		add_filter( 'mailster_wp_mail_htmlify', '__return_false' );
 
@@ -284,58 +287,58 @@ class MailsterWooCommerce {
 			case 'woocommerce_order_status_failed_to_completed_notification':
 			case 'woocommerce_order_status_failed_to_on-hold_notification':
 				$file = isset( $templates['new_order'] ) ? $templates['new_order'] : $file;
-			break;
+				break;
 
 			case 'woocommerce_order_status_pending_to_processing_notification':
 			case 'woocommerce_order_status_pending_to_on-hold_notification':
 				$file = isset( $templates['processing_order'] ) ? $templates['processing_order'] : $file;
-			break;
+				break;
 
 			case 'woocommerce_order_status_completed_notification':
 				$file = isset( $templates['completed_order'] ) ? $templates['completed_order'] : $file;
-			break;
+				break;
 
 			case 'invoice':
 				$file = isset( $templates['invoice'] ) ? $templates['invoice'] : $file;
-			break;
+				break;
 
 			case 'woocommerce_created_customer_notification':
 			case 'woocommerce_new_customer_note_notification':
 				$file = isset( $templates['note'] ) ? $templates['note'] : $file;
-			break;
+				break;
 
 			case 'woocommerce_reset_password_notification':
 				$file = isset( $templates['reset_password'] ) ? $templates['reset_password'] : $file;
-			break;
+				break;
 
 			case 'new_account':
 				$file = isset( $templates['new_account'] ) ? $templates['new_account'] : $file;
-			break;
+				break;
 
 			case 'woocommerce_process_shop_order_meta':
 				if ( isset( $_POST['wc_order_action'] ) ) {
 					switch ( $_POST['wc_order_action'] ) {
 						case 'send_email_new_order':
 							$file = isset( $templates['new_order'] ) ? $templates['new_order'] : $file;
-						break;
+							break;
 						case 'send_email_cancelled_order':
 							$file = isset( $templates['cancelled_order'] ) ? $templates['cancelled_order'] : $file;
-						break;
+							break;
 						case 'send_email_customer_processing_order':
 							$file = isset( $templates['processing_order'] ) ? $templates['processing_order'] : $file;
-						break;
+							break;
 						case 'send_email_customer_completed_order':
 							$file = isset( $templates['completed_order'] ) ? $templates['completed_order'] : $file;
-						break;
+							break;
 						case 'send_email_customer_refunded_order':
 							$file = isset( $templates['refunded_order'] ) ? $templates['refunded_order'] : $file;
-						break;
+							break;
 						case 'send_email_customer_invoice':
 							$file = isset( $templates['invoice'] ) ? $templates['invoice'] : $file;
-						break;
+							break;
 					}
 				}
-			break;
+				break;
 
 		}
 
@@ -354,23 +357,23 @@ class MailsterWooCommerce {
 		if ( function_exists( 'mailster' ) ) {
 
 			$defaults = array(
-				'woocommerce_action' => 'created',
-				'woocommerce_type' => 'checkbox',
-				'woocommerce_checkbox' => false,
-				'woocommerce_checkbox_pos' => 'after_customer_details',
-				'woocommerce_label' => __( 'Subscribe to our newsletter', 'mailster-woocommerce' ),
-				'woocommerce_templates' => array(
-					'new_order' => 0,
-					'cancelled_order' => 0,
-					'refunded_order' => 0,
+				'woocommerce_action'        => 'created',
+				'woocommerce_type'          => 'checkbox',
+				'woocommerce_checkbox'      => false,
+				'woocommerce_checkbox_pos'  => 'after_customer_details',
+				'woocommerce_label'         => __( 'Subscribe to our newsletter', 'mailster-woocommerce' ),
+				'woocommerce_templates'     => array(
+					'new_order'        => 0,
+					'cancelled_order'  => 0,
+					'refunded_order'   => 0,
 					'processing_order' => 0,
-					'completed_order' => 0,
-					'invoice' => 0,
-					'note' => 0,
-					'reset_password' => 0,
-					'new_account' => 0,
+					'completed_order'  => 0,
+					'invoice'          => 0,
+					'note'             => 0,
+					'reset_password'   => 0,
+					'new_account'      => 0,
 				),
-				'woocommerce-skip-user' => true,
+				'woocommerce-skip-user'     => true,
 				'woocommerce-double-opt-in' => true,
 			);
 
@@ -394,9 +397,9 @@ class MailsterWooCommerce {
 
 	public function notice() {
 		$msg = sprintf( __( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://rxa.li/mailster?utm_campaign=plugin&utm_medium=link&utm_source=Mailster+for+WooCommerce">Mailster Newsletter Plugin</a>' );
-?>
+		?>
 		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
-	<?php
+		<?php
 
 	}
 
