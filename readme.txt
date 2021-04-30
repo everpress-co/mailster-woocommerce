@@ -2,8 +2,8 @@
 Contributors: everpress
 Tags: mailster, newsletter, ecommerce, leads
 Requires at least: 3.8
-Tested up to: 5.5
-Stable tag: 1.4
+Tested up to: 5.7
+Stable tag: 1.5
 License: GPLv2 or later
 Author: EverPress
 Author URI: https://mailster.co
@@ -23,6 +23,12 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 3. Example Checkbox on Checkout
 
 == Changelog ==
+
+= Version 1.5 =
+
+* fixed: use of deprecated method on order object
+* updated markup of signup checkbox
+* now requires WooCommerce 3.0 or above
 
 = Version 1.4 =
 

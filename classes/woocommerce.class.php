@@ -209,15 +209,16 @@ class MailsterWooCommerce {
 		if ( ! $order ) {
 			return;
 		}
-		if ( ! isset( $order->billing_email ) ) {
+
+		if ( ! $order->get_billing_email() ) {
 			return;
 		}
 
 		$default_lists = mailster_option( 'woocommerce_lists', array() );
 
-		$email     = $order->billing_email;
-		$firstname = $order->billing_first_name;
-		$lastname  = $order->billing_last_name;
+		$email     = $order->get_billing_email();
+		$firstname = $order->get_billing_first_name();
+		$lastname  = $order->get_billing_last_name();
 
 		foreach ( $order->get_items() as $item ) {
 
@@ -236,14 +237,14 @@ class MailsterWooCommerce {
 				'firstname' => $firstname,
 				'lastname'  => $lastname,
 				'email'     => $email,
-				'referer'   => sprintf( '<a href="' . admin_url( 'post.php?post=%d&action=edit' ) . '">%s #%d</a>', $order->id, __( 'Order', 'mailster-woocommerce' ), $order->id ),
+				'referer'   => sprintf( '<a href="' . admin_url( 'post.php?post=%d&action=edit' ) . '">%s #%d</a>', $order_id, __( 'Order', 'mailster-woocommerce' ), $order_id ),
 				'status'    => mailster_options( 'woocommerce-double-opt-in' ) ? 0 : 1,
 			);
 
 			$synclist = mailster_option( 'sync' ) ? mailster_option( 'synclist', array() ) : array();
 			foreach ( $synclist as $usermeta => $field ) {
-				if ( isset( $order->{$field} ) ) {
-					$user_data[ $usermeta ] = $order->{$field};
+				if ( method_exists( $order, 'get_' . $field ) && $value = call_user_func( array( $order, 'get_' . $field ) ) ) {
+					$user_data[ $usermeta ] = $value;
 				}
 			}
 
@@ -266,7 +267,7 @@ class MailsterWooCommerce {
 			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
 				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
 			} else {
-				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> ' . mailster_option( 'woocommerce_label' ) . '</label></div>';
+				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
 			}
 		}
 
