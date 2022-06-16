@@ -19,15 +19,9 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ### 1. Option Interface.
 
-[missing image]
-
 ### 2. Product List Meta Box
 
-[missing image]
-
 ### 3. Example Checkbox on Checkout
-
-[missing image]
 
 ## Changelog
 
