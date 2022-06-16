@@ -17,11 +17,20 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Screenshots
 
-1. Option Interface
+### 1. Option Interface
 
-2. Product List Meta Box
+![Option Interface](https://ps.w.org/mailster-woocommerce/assets/screenshot-1.png)
 
-3. Example Checkbox on Checkout
+
+### 2. Product List Meta Box
+
+![Product List Meta Box](https://ps.w.org/mailster-woocommerce/assets/screenshot-2.png)
+
+
+### 3. Example Checkbox on Checkout
+
+![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
+
 
 ## Changelog
 
