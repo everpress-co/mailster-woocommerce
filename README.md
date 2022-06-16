@@ -17,11 +17,11 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Screenshots
 
-### 1. Option Interface.
+1. Option Interface
 
-### 2. Product List Meta Box
+2. Product List Meta Box
 
-### 3. Example Checkbox on Checkout
+3. Example Checkbox on Checkout
 
 ## Changelog
 
