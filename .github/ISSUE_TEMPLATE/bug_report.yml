@@ -16,8 +16,8 @@ body:
       label: What happened?
       description: A clear and concise description of what the bug is.
       placeholder: Tell us what you see!
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: steps-to-reproduce
@@ -29,8 +29,8 @@ body:
         2. Click on '....'
         3. Scroll down to '....'
         4. See error
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: input
     id: prevalence
@@ -38,8 +38,8 @@ body:
       label: Bug prevalence
       description: 'How often do you or others encounter this bug?'
       placeholder: 'Example: Whenever I visit the personal account page (1-2 times a week)'
-      validations:
-        required: true
+    validations:
+      required: true
 
   - type: textarea
     id: logs
