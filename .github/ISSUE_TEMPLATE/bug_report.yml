@@ -32,21 +32,28 @@ body:
     validations:
       required: true
 
-  - type: input
-    id: prevalence
+  - type: textarea
+    id: expected
     attributes:
-      label: Bug prevalence
-      description: 'How often do you or others encounter this bug?'
-      placeholder: 'Example: Whenever I visit the personal account page (1-2 times a week)'
-    validations:
-      required: true
+      label: What should have happened?
+      description: A clear and concise description of what you expected to happen.
 
   - type: textarea
-    id: logs
+    id: environment
     attributes:
-      label: Relevant log output
-      description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-      render: shell
+      label: Environment
+      description: If applicable and bug is related to this environment
+      placeholder: |
+        - OS: [e.g. iOS]
+        - Browser [e.g. chrome, safari]
+        - Version [e.g. 22]
+
+  - type: input
+    id: helpscout
+    attributes:
+      label: HelpScout Ticket
+      description: 'The link to the HelpScout Ticket'
+      placeholder: 'https://secure.helpscout.net/conversation/...'
 
   - type: checkboxes
     id: terms
