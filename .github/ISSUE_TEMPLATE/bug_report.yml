@@ -22,7 +22,7 @@ body:
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps To Reproduce
+      label: Steps to reproduce
       description: Tell us which steps needed to reproduce the behavior.
       placeholder: |
         1. Go to '...'
@@ -58,10 +58,8 @@ body:
   - type: checkboxes
     id: terms
     attributes:
-      label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
+      label: Acceptance Criteria
+      description: Please make sure you checked on following things.
       options:
         - label: There's no other issue opened which for this issue
-          required: true
-        - label: I agree to follow this project's Code of Conduct
           required: true
