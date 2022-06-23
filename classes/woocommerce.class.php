@@ -263,13 +263,13 @@ class MailsterWooCommerce {
 			return;
 		}
 
-		if ( 'checkbox' == mailster_option( 'woocommerce_type' ) ) {
-			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
-				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
-			} else {
-				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
-			}
+		if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
+			$output =  '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
+		} else {
+			$output = '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
 		}
+
+		echo apply_filters( 'woocommerce_mailster_checkbox_output', $output );
 
 	}
 
