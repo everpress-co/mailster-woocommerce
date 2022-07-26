@@ -4,7 +4,7 @@ Contributors: everpress, xaverb
 Tags: mailster, newsletter, ecommerce, leads  
 Requires at least: 3.8  
 Tested up to: 6.0  
-Stable tag: 1.5  
+Stable tag: 1.6  
 License: GPLv2 or later
 
 ## Description
@@ -30,6 +30,10 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
+
+### Version 1.6
+
+-   new: option to disable WooCommerece style in email
 
 ### Version 1.5
 
