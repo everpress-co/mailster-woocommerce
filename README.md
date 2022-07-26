@@ -1,6 +1,6 @@
 # Mailster for WooCommerce
 
-Contributors: everpress  
+Contributors: everpress, xaverb  
 Tags: mailster, newsletter, ecommerce, leads  
 Requires at least: 3.8  
 Tested up to: 6.0  
@@ -21,16 +21,13 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ![Option Interface](https://ps.w.org/mailster-woocommerce/assets/screenshot-1.png)
 
-
 ### 2. Product List Meta Box
 
 ![Product List Meta Box](https://ps.w.org/mailster-woocommerce/assets/screenshot-2.png)
 
-
 ### 3. Example Checkbox on Checkout
 
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
-
 
 ## Changelog
 

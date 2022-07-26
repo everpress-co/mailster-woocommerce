@@ -72,9 +72,16 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<td><label><input type="hidden" name="mailster_options[woocommerce-double-opt-in]" value="0"><input type="checkbox" name="mailster_options[woocommerce-double-opt-in]" value="1" <?php checked( mailster_option( 'woocommerce-double-opt-in' ) ); ?>> <?php esc_html_e( 'send confirmation (double-opt-in)', 'mailster-woocommerce' ); ?></label></td>
 	</tr>
 	<tr valign="top">
+		<th scope="row"><?php esc_html_e( 'WooCommerce Styling', 'mailster-woocommerce' ); ?></th>
+		<td><label><input type="hidden" name="mailster_options[woocommerce-css]" value="0"><input type="checkbox" name="mailster_options[woocommerce-css]" value="1" <?php checked( mailster_option( 'woocommerce-css' ) ); ?>> <?php esc_html_e( 'Remove WooCommerce styling in emails.', 'mailster-woocommerce' ); ?></label>
+			<p class="description">
+			<?php esc_html_e( 'Removes the WooCommerce style block from the email. This helps your emails look more like the Mailster template.', 'mailster-woocommerce' ); ?>
+		</p</td>
+	</tr>
+	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Template Files', 'mailster-woocommerce' ); ?>
 		<p class="description">
-			<?php esc_html_e( 'Define the template file used for transactional emails. Selecting "default" will use the template from the General tab' ); ?>
+			<?php esc_html_e( 'Define the template file used for transactional emails. Selecting "default" will use the template from the General tab', 'mailster-woocommerce' ); ?>
 		</p></th>
 		<td>
 		<?php if ( mailster_option( 'system_mail' ) ) : ?>
