@@ -1,10 +1,10 @@
 # Mailster for WooCommerce
 
-Contributors: everpress  
+Contributors: everpress, xaverb  
 Tags: mailster, newsletter, ecommerce, leads  
 Requires at least: 3.8  
 Tested up to: 6.0  
-Stable tag: 1.5  
+Stable tag: 1.6  
 License: GPLv2 or later
 
 ## Description
@@ -17,19 +17,23 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Screenshots
 
-### 1. Option Interface.
+### 1. Option Interface
 
-[missing image]
+![Option Interface](https://ps.w.org/mailster-woocommerce/assets/screenshot-1.png)
 
 ### 2. Product List Meta Box
 
-[missing image]
+![Product List Meta Box](https://ps.w.org/mailster-woocommerce/assets/screenshot-2.png)
 
 ### 3. Example Checkbox on Checkout
 
-[missing image]
+![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
+
+### Version 1.6
+
+-   new: option to disable WooCommerece style in email
 
 ### Version 1.5
 

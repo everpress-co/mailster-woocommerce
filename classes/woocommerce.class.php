@@ -54,6 +54,9 @@ class MailsterWooCommerce {
 		add_action( 'woocommerce_order_status_completed', array( &$this, 'on_completed' ) );
 
 		add_action( 'woocommerce_email', array( &$this, 'remove_header_and_footer' ) );
+
+		add_filter( 'woocommerce_email_styles', array( &$this, 'maybe_remove_css' ) );
+
 		add_filter( 'mailster_wp_mail_template_file', array( &$this, 'set_template' ), 10, 3 );
 
 	}
@@ -138,7 +141,7 @@ class MailsterWooCommerce {
 		?>
 		<?php mailster( 'lists' )->print_it( null, null, 'mailster_lists', false, $selected_lists ); ?>
 		<p class="description">
-			<?php _e( 'Customers who purchases this product will get added to these lists', 'mailster-woocommerce' ); ?>
+			<?php esc_html_e( 'Customers who purchases this product will get added to these lists', 'mailster-woocommerce' ); ?>
 		</p>
 
 		<?php
@@ -178,6 +181,14 @@ class MailsterWooCommerce {
 
 		include $this->plugin_path . '/views/settings.php';
 
+	}
+
+	public function maybe_remove_css( $css ) {
+		if ( mailster_option( 'system_mail' ) && mailster_option( 'woocommerce-css' ) ) {
+			$css = '.td{border:0;border-bottom: 1px solid;padding:4px;}';
+		}
+
+		return $css;
 	}
 
 	public function on_checkout( $order_id ) {
@@ -253,7 +264,8 @@ class MailsterWooCommerce {
 
 		if ( ! empty( $default_lists ) && ! is_wp_error( $subscriber_id ) ) {
 			$lists   = array_unique( $default_lists );
-			$success = mailster( 'subscribers' )->assign_lists( $subscriber_id, $lists, false );
+			$added   = mailster_options( 'woocommerce-double-opt-in' ) ? null : true;
+			$success = mailster( 'subscribers' )->assign_lists( $subscriber_id, $lists, false, $added );
 		}
 	}
 
@@ -264,7 +276,15 @@ class MailsterWooCommerce {
 		}
 
 		if ( 'checkbox' == mailster_option( 'woocommerce_type' ) ) {
+
+			$customer   = WC()->session->get( 'customer' );
+			$subscriber = null;
+			if ( $customer['email'] ) {
+				$subscriber = mailster( 'subscribers' )->get_by_mail( $customer['email'] );
+			}
 			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
+				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
+			} elseif ( $subscriber ) {
 				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
 			} else {
 				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
@@ -376,6 +396,7 @@ class MailsterWooCommerce {
 				),
 				'woocommerce-skip-user'     => true,
 				'woocommerce-double-opt-in' => true,
+				'woocommerce-css'           => true,
 			);
 
 			$mailster_options = mailster_options();
@@ -391,13 +412,11 @@ class MailsterWooCommerce {
 
 
 	public function deactivate() {
-		if ( function_exists( 'mailster' ) ) {
-		}
 	}
 
 
 	public function notice() {
-		$msg = sprintf( __( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://rxa.li/mailster?utm_campaign=plugin&utm_medium=link&utm_source=Mailster+for+WooCommerce">Mailster Newsletter Plugin</a>' );
+		$msg = sprintf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=Mailster+for+WooCommerce">Mailster Newsletter Plugin</a>' );
 		?>
 		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
 		<?php
