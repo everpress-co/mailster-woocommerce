@@ -59,6 +59,9 @@ class MailsterWooCommerce {
 
 		add_filter( 'mailster_wp_mail_template_file', array( &$this, 'set_template' ), 10, 3 );
 
+		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ) );
+		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
+
 	}
 
 	public function add_settings_tab( $settings_tabs ) {
@@ -372,6 +375,44 @@ class MailsterWooCommerce {
 			remove_action( 'woocommerce_email_header', array( $wooEmailObj, 'email_header' ) );
 			remove_action( 'woocommerce_email_footer', array( $wooEmailObj, 'email_footer' ) );
 		}
+	}
+
+	public function add_woocommerce_post_types( $post_types ) {
+
+		$post_types[] = 'shop_coupon';
+
+		return $post_types;
+	}
+
+	public function add_woocommerce_tags( $tags ) {
+
+		$coupons = get_posts(
+			array(
+				'posts_per_page' => -1,
+				'orderby'        => 'title',
+				'order'          => 'asc',
+				'post_type'      => 'shop_coupon',
+				'post_status'    => 'publish',
+
+			)
+		);
+
+		if ( empty( $coupons ) ) {
+			return $tags;
+		}
+
+		$codes = array();
+
+		foreach ( $coupons as $coupon ) {
+			$codes[ 'shop_coupon_title:' . $coupon->ID ] = $coupon->post_title;
+		}
+
+		$tags['woocomerce'] = array(
+			'name' => __( 'WooCommerce Coupons', 'mailster-woocommerce' ),
+			'tags' => $codes,
+		);
+
+		return $tags;
 	}
 
 	public function activate() {

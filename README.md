@@ -4,7 +4,7 @@ Contributors: everpress, xaverb
 Tags: mailster, newsletter, ecommerce, leads  
 Requires at least: 3.8  
 Tested up to: 6.0  
-Stable tag: 1.6  
+Stable tag: 1.7  
 License: GPLv2 or later
 
 ## Description
@@ -31,34 +31,39 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Changelog
 
-### Version 1.6
+### 1.7
+
+-   added coupons to supported post types
+-   added coupons to tags list
+
+### 1.6
 
 -   new: option to disable WooCommerece style in email
 
-### Version 1.5
+### 1.5
 
 -   fixed: use of deprecated method on order object
 -   updated markup of signup checkbox
 -   now requires WooCommerce 3.0 or above
 
-### Version 1.4
+### 1.4
 
 -   new option to skip checkbox for registered users
 
-### Version 1.3
+### 1.3
 
 -   fixed: admin url in referer
 
-### Version 1.2
+### 1.2
 
 -   updated file structure
 -   additional checkbox positions
 
-### Version 1.1
+### 1.1
 
 -   added: option to choose position of checkbox on the checkout page
 -   wrapped checkbox in label tag for better UX
 
-### Version 1.0
+### 1.0
 
 -   Initial Release
