@@ -2,7 +2,7 @@
 
 Contributors: everpress, xaverb  
 Tags: mailster, newsletter, ecommerce, leads  
-Requires at least: 3.8  
+Requires at least: 4.3  
 Tested up to: 6.0  
 Stable tag: 1.7  
 License: GPLv2 or later
