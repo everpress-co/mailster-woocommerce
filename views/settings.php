@@ -55,6 +55,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 			<option value="after_checkout_registration_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_checkout_registration_form' ); ?>><?php esc_html_e( 'after Checkout Registration Form', 'mailster-woocommerce' ); ?></option>
 			<option value="before_checkout_billing_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_checkout_billing_form' ); ?>><?php esc_html_e( 'before Checkout Billing Form', 'mailster-woocommerce' ); ?></option>
 			<option value="after_checkout_billing_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_checkout_billing_form' ); ?>><?php esc_html_e( 'after Checkout Billing Form', 'mailster-woocommerce' ); ?></option>
+			<option value="before_terms_and_conditions" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_terms_and_conditions' ); ?>><?php esc_html_e( 'before Terms and Conditions Form', 'mailster-woocommerce' ); ?></option>
+			<option value="after_terms_and_conditions" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_terms_and_conditions' ); ?>><?php esc_html_e( 'after Terms and Conditions Form', 'mailster-woocommerce' ); ?></option>
 		</select>
 		</p>
 		</td>
