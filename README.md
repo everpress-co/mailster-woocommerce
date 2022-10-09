@@ -11,7 +11,7 @@ License: GPLv2 or later
 
 ### Add your WooCommerce customers to your Mailster subscriber lists
 
-> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=WooCommerce+for+Mailster)
+> This Plugin requires [Mailster Newsletter Plugin for WordPress](https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=WooCommerce)
 
 Read more about the add on on our [knowledge base](https://kb.mailster.co/mailster-and-woocommerce/).
 

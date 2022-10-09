@@ -457,7 +457,7 @@ class MailsterWooCommerce {
 
 
 	public function notice() {
-		$msg = sprintf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=Mailster+for+WooCommerce">Mailster Newsletter Plugin</a>' );
+		$msg = sprintf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' );
 		?>
 		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
 		<?php
