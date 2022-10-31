@@ -1,10 +1,10 @@
 # Mailster for WooCommerce
 
 Contributors: everpress, xaverb  
-Tags: mailster, newsletter, ecommerce, leads  
+Tags: mailster, newsletter, ecommerce, leads, woocommerce  
 Requires at least: 4.3  
 Tested up to: 6.0  
-Stable tag: 1.7  
+Stable tag: 1.7.1  
 License: GPLv2 or later
 
 ## Description
@@ -30,6 +30,11 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
+
+### 1.7.1
+
+-   fixed: coupons are not displayed correctly in dynamic edit bar
+-   fixed: checks if current session has a customer before getting the subscriber by email
 
 ### 1.7
 
