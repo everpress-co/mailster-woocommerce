@@ -59,7 +59,7 @@ class MailsterWooCommerce {
 
 		add_filter( 'mailster_wp_mail_template_file', array( &$this, 'set_template' ), 10, 3 );
 
-		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ) );
+		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ), 10, 2 );
 		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
 
 	}
@@ -282,7 +282,7 @@ class MailsterWooCommerce {
 
 			$customer   = WC()->session->get( 'customer' );
 			$subscriber = null;
-			if ( $customer['email'] ) {
+			if ( isset( $customer ) && $customer['email'] ) {
 				$subscriber = mailster( 'subscribers' )->get_by_mail( $customer['email'] );
 			}
 			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
@@ -377,9 +377,16 @@ class MailsterWooCommerce {
 		}
 	}
 
-	public function add_woocommerce_post_types( $post_types ) {
+	public function add_woocommerce_post_types( $post_types, $output = 'names' ) {
+		global $wp_post_types;
 
-		$post_types[] = 'shop_coupon';
+		if ( $output === 'names' ) {
+			$post_types[] = 'shop_coupon';
+		} else {
+			if ( isset( $wp_post_types['shop_coupon'] ) ) {
+				$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
+			}
+		}
 
 		return $post_types;
 	}
