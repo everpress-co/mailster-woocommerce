@@ -3,7 +3,7 @@
 Contributors: everpress, xaverb  
 Tags: mailster, newsletter, ecommerce, leads, woocommerce  
 Requires at least: 4.3  
-Tested up to: 6.0  
+Tested up to: 6.1  
 Stable tag: 1.7.1  
 License: GPLv2 or later
 
