@@ -2,7 +2,7 @@
 
 class MailsterWooCommerce {
 
-	private $plugin_dir;
+	private $plugin_path;
 	private $plugin_url;
 
 	public function __construct() {
@@ -16,7 +16,6 @@ class MailsterWooCommerce {
 		load_plugin_textdomain( 'mailster-woocommerce' );
 
 		add_action( 'plugins_loaded', array( &$this, 'init' ) );
-
 	}
 
 
@@ -61,7 +60,6 @@ class MailsterWooCommerce {
 
 		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ), 10, 2 );
 		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
-
 	}
 
 	public function add_settings_tab( $settings_tabs ) {
@@ -170,20 +168,17 @@ class MailsterWooCommerce {
 
 		$lists = isset( $_POST['mailster_lists'] ) ? (array) $_POST['mailster_lists'] : array();
 		update_post_meta( $post_id, '_mailster_lists', $lists );
-
 	}
 
 	public function metabox() {
 
 		include $this->plugin_path . '/views/metabox.php';
-
 	}
 
 
 	public function settings() {
 
 		include $this->plugin_path . '/views/settings.php';
-
 	}
 
 	public function maybe_remove_css( $css ) {
@@ -205,7 +200,6 @@ class MailsterWooCommerce {
 				$this->subscribe( $order_id );
 			}
 		}
-
 	}
 
 
@@ -293,7 +287,6 @@ class MailsterWooCommerce {
 				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
 			}
 		}
-
 	}
 
 	public function set_template( $file, $caller, $current_filter ) {
@@ -367,7 +360,6 @@ class MailsterWooCommerce {
 		}
 
 		return $file ? $file : $default;
-
 	}
 
 	public function remove_header_and_footer( $wooEmailObj ) {
@@ -382,10 +374,8 @@ class MailsterWooCommerce {
 
 		if ( $output === 'names' ) {
 			$post_types[] = 'shop_coupon';
-		} else {
-			if ( isset( $wp_post_types['shop_coupon'] ) ) {
+		} elseif ( isset( $wp_post_types['shop_coupon'] ) ) {
 				$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
-			}
 		}
 
 		return $post_types;
@@ -455,7 +445,6 @@ class MailsterWooCommerce {
 				}
 			}
 		}
-
 	}
 
 
@@ -468,7 +457,5 @@ class MailsterWooCommerce {
 		?>
 		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
 		<?php
-
 	}
-
 }
