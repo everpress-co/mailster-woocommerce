@@ -36,24 +36,17 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_type]">
 			<option value="checkbox" <?php selected( mailster_option( 'woocommerce_type' ), 'checkbox' ); ?>><?php esc_html_e( 'by a checkbox on the checkout page', 'mailster-woocommerce' ); ?></option>
 			<option value="auto" <?php selected( mailster_option( 'woocommerce_type' ), 'auto' ); ?>><?php esc_html_e( 'automatically without checkbox', 'mailster-woocommerce' ); ?></option>
-		</select>
-		<p>
-		<?php esc_html_e( 'the checkbox default state is', 'mailster-woocommerce' ); ?>
-		<select name="mailster_options[woocommerce_checkbox]">
-			<option value="1" <?php selected( mailster_option( 'woocommerce_checkbox' ) ); ?>><?php esc_html_e( 'checked', 'mailster-woocommerce' ); ?></option>
-			<option value="0" <?php selected( ! mailster_option( 'woocommerce_checkbox' ) ); ?>><?php esc_html_e( 'unchecked', 'mailster-woocommerce' ); ?></option>
-		</select>
-		</p>
+		</select>		
 		<p>
 		<?php esc_html_e( 'the checkbox position is', 'mailster-woocommerce' ); ?>
 		<select name="mailster_options[woocommerce_checkbox_pos]">
-			<option value="before_order_review" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_order_review' ); ?>><?php esc_html_e( 'before Order Review', 'mailster-woocommerce' ); ?></option>
+			<option value="before_order_review" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_order_review' ); ?>><?php esc_html_e( 'before Order Review (deprecated)', 'mailster-woocommerce' ); ?></option>
 			<option value="after_order_review" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_order_review' ); ?>><?php esc_html_e( 'after Order Review', 'mailster-woocommerce' ); ?></option>
-			<option value="before_customer_details" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_customer_details' ); ?>><?php esc_html_e( 'before Customer Details', 'mailster-woocommerce' ); ?></option>
+			<option value="before_customer_details" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_customer_details' ); ?>><?php esc_html_e( 'before Customer Details (deprecated)', 'mailster-woocommerce' ); ?></option>
 			<option value="after_customer_details" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_customer_details' ); ?>><?php esc_html_e( 'after Customer Details', 'mailster-woocommerce' ); ?></option>
-			<option value="before_checkout_registration_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_checkout_registration_form' ); ?>><?php esc_html_e( 'before Checkout Registration Form', 'mailster-woocommerce' ); ?></option>
+			<option value="before_checkout_registration_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_checkout_registration_form' ); ?>><?php esc_html_e( 'before Checkout Registration Form (deprecated)', 'mailster-woocommerce' ); ?></option>
 			<option value="after_checkout_registration_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_checkout_registration_form' ); ?>><?php esc_html_e( 'after Checkout Registration Form', 'mailster-woocommerce' ); ?></option>
-			<option value="before_checkout_billing_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_checkout_billing_form' ); ?>><?php esc_html_e( 'before Checkout Billing Form', 'mailster-woocommerce' ); ?></option>
+			<option value="before_checkout_billing_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'before_checkout_billing_form' ); ?>><?php esc_html_e( 'before Checkout Billing Form (deprecated)', 'mailster-woocommerce' ); ?></option>
 			<option value="after_checkout_billing_form" <?php selected( mailster_option( 'woocommerce_checkbox_pos' ), 'after_checkout_billing_form' ); ?>><?php esc_html_e( 'after Checkout Billing Form', 'mailster-woocommerce' ); ?></option>
 		</select>
 		</p>
