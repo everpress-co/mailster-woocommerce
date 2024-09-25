@@ -1,50 +1,35 @@
 <?php
 
+namespace EverPress;
+
 class MailsterWooCommerce {
 
-	private $plugin_dir;
+	private $plugin_path;
 	private $plugin_url;
+	private static $instance = null;
 
-	public function __construct() {
+	private function __construct() {
 
 		$this->plugin_path = plugin_dir_path( MAILSTER_WOOCOMMERCE_FILE );
 		$this->plugin_url  = plugin_dir_url( MAILSTER_WOOCOMMERCE_FILE );
 
-		register_activation_hook( MAILSTER_WOOCOMMERCE_FILE, array( &$this, 'activate' ) );
-		register_deactivation_hook( MAILSTER_WOOCOMMERCE_FILE, array( &$this, 'deactivate' ) );
-
 		load_plugin_textdomain( 'mailster-woocommerce' );
 
-		add_action( 'plugins_loaded', array( &$this, 'init' ) );
-
-	}
-
-
-	public function init() {
-
 		if ( ! function_exists( 'mailster' ) ) {
-
 			add_action( 'admin_notices', array( &$this, 'notice' ) );
 			return;
-
 		}
 
-		if ( is_admin() ) {
+		add_filter( 'mailster_setting_sections', array( &$this, 'settings_tab' ) );
+		add_action( 'mailster_section_tab_woocommerce', array( &$this, 'settings' ) );
 
-			add_filter( 'mailster_setting_sections', array( &$this, 'settings_tab' ) );
-			add_action( 'mailster_section_tab_woocommerce', array( &$this, 'settings' ) );
+		add_filter( 'woocommerce_settings_tabs_array', array( &$this, 'add_settings_tab' ), 100 );
+		add_action( 'woocommerce_settings_tabs_mailster', array( &$this, 'mailster_settings_tab' ) );
+		add_action( 'woocommerce_settings_mailster', array( &$this, 'woocommerce_settings_mailster' ) );
 
-			add_filter( 'woocommerce_settings_tabs_array', array( &$this, 'add_settings_tab' ), 100 );
-			add_action( 'woocommerce_settings_tabs_mailster', array( &$this, 'mailster_settings_tab' ) );
-			add_action( 'woocommerce_settings_mailster', array( &$this, 'woocommerce_settings_mailster' ) );
+		add_action( 'add_meta_boxes_product', array( &$this, 'add_mailster_product_metabox' ) );
 
-			add_action( 'add_meta_boxes_product', array( &$this, 'add_mailster_product_metabox' ) );
-
-			add_action( 'save_post', array( &$this, 'save_product' ), 10, 2 );
-
-		} else {
-
-		}
+		add_action( 'save_post_product', array( &$this, 'save_product' ), 10, 2 );
 
 		add_action( 'woocommerce_checkout_' . mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ), array( &$this, 'checkbox' ) );
 		add_action( 'woocommerce_' . mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ), array( &$this, 'checkbox' ) );
@@ -52,6 +37,7 @@ class MailsterWooCommerce {
 		add_action( 'woocommerce_checkout_update_order_meta', array( &$this, 'on_checkout' ) );
 
 		add_action( 'woocommerce_order_status_completed', array( &$this, 'on_completed' ) );
+		add_action( 'woocommerce_thankyou', array( &$this, 'thankyou' ) );
 
 		add_action( 'woocommerce_email', array( &$this, 'remove_header_and_footer' ) );
 
@@ -62,6 +48,67 @@ class MailsterWooCommerce {
 		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ), 10, 2 );
 		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
 
+		add_action( 'woocommerce_init', array( &$this, 'register_additional_checkout_fields' ) );
+	}
+
+	public function register_additional_checkout_fields() {
+
+		if ( ! function_exists( 'woocommerce_register_additional_checkout_field' ) ) {
+			return;
+		}
+
+		if ( 'checkbox' !== mailster_option( 'woocommerce_type' ) ) {
+			return;
+		}
+
+		if ( mailster_option( 'woocommerce-skip-user' ) ) {
+
+			if ( is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
+				return;
+			}
+
+			if ( mailster_get_current_user_id() ) {
+				return;
+			}
+		}
+
+		// get the location from the legacy method
+		switch ( mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ) ) {
+			case 'before_order_review':
+			case 'after_order_review':
+				$location = 'order';
+				break;
+			case 'before_checkout_billing_form':
+			case 'after_checkout_billing_form':
+				$location = 'address';
+				break;
+			case 'before_customer_details':
+			case 'after_customer_details':
+			default:
+				$location = 'contact';
+				break;
+		}
+
+		woocommerce_register_additional_checkout_field(
+			array(
+				'id'            => 'mailster/subscribe',
+				'label'         => esc_html( mailster_option( 'woocommerce_label' ) ),
+				'optionalLabel' => esc_html( mailster_option( 'woocommerce_label' ) ),
+				'location'      => $location,
+				'type'          => 'checkbox',
+				'default'       => 'checked',
+
+			)
+		);
+	}
+
+
+	public static function get_instance() {
+		if ( self::$instance == null ) {
+			self::$instance = new MailsterWooCommerce();
+		}
+
+		return self::$instance;
 	}
 
 	public function add_settings_tab( $settings_tabs ) {
@@ -126,7 +173,6 @@ class MailsterWooCommerce {
 		return $settings;
 	}
 
-
 	public function add_mailster_product_metabox() {
 
 		add_meta_box( 'mailster_product_metabox', 'Mailster', array( &$this, 'mailster_product_metabox' ), 'product', 'side', 'core' );
@@ -170,20 +216,16 @@ class MailsterWooCommerce {
 
 		$lists = isset( $_POST['mailster_lists'] ) ? (array) $_POST['mailster_lists'] : array();
 		update_post_meta( $post_id, '_mailster_lists', $lists );
-
 	}
 
 	public function metabox() {
 
 		include $this->plugin_path . '/views/metabox.php';
-
 	}
-
 
 	public function settings() {
 
 		include $this->plugin_path . '/views/settings.php';
-
 	}
 
 	public function maybe_remove_css( $css ) {
@@ -193,6 +235,8 @@ class MailsterWooCommerce {
 
 		return $css;
 	}
+
+
 
 	public function on_checkout( $order_id ) {
 
@@ -205,9 +249,7 @@ class MailsterWooCommerce {
 				$this->subscribe( $order_id );
 			}
 		}
-
 	}
-
 
 	public function on_completed( $order_id ) {
 
@@ -216,9 +258,38 @@ class MailsterWooCommerce {
 		}
 	}
 
+	public function thankyou( $order_id ) {
+
+		$order = wc_get_order( $order_id );
+
+		$value = $order->get_meta( '_wc_other/mailster/subscribe' );
+
+		// always signup if auto is enabled
+		if ( 'auto' == mailster_option( 'woocommerce_type' ) ) {
+			$value = true;
+		}
+
+		// subscribe
+		if ( $value ) {
+			$action = mailster_option( 'woocommerce_action' );
+			if ( 'completed' == $action ) {
+				$wc_object->update_meta_data( 'mailster_signup', true, true );
+			} elseif ( 'created' == $action ) {
+				$this->subscribe( $order_id );
+			}
+			// unsubscribe
+		} else {
+			// get email from order
+			$email = $order->get_billing_email();
+			mailster( 'subscribers' )->unsubscribe_by_mail( $email );
+
+		}
+	}
+
 	public function subscribe( $order_id ) {
 
-		$order = new WC_Order( $order_id );
+		// get order by id
+		$order = wc_get_order( $order_id );
 
 		if ( ! $order ) {
 			return;
@@ -270,6 +341,8 @@ class MailsterWooCommerce {
 			$added   = mailster_options( 'woocommerce-double-opt-in' ) ? null : true;
 			$success = mailster( 'subscribers' )->assign_lists( $subscriber_id, $lists, false, $added );
 		}
+
+		return $subscriber_id;
 	}
 
 	public function checkbox() {
@@ -290,10 +363,9 @@ class MailsterWooCommerce {
 			} elseif ( $subscriber ) {
 				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
 			} else {
-				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox" ' . checked( mailster_option( 'woocommerce_checkbox' ), true, false ) . '> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
+				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox"> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
 			}
 		}
-
 	}
 
 	public function set_template( $file, $caller, $current_filter ) {
@@ -367,7 +439,6 @@ class MailsterWooCommerce {
 		}
 
 		return $file ? $file : $default;
-
 	}
 
 	public function remove_header_and_footer( $wooEmailObj ) {
@@ -382,10 +453,8 @@ class MailsterWooCommerce {
 
 		if ( $output === 'names' ) {
 			$post_types[] = 'shop_coupon';
-		} else {
-			if ( isset( $wp_post_types['shop_coupon'] ) ) {
+		} elseif ( isset( $wp_post_types['shop_coupon'] ) ) {
 				$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
-			}
 		}
 
 		return $post_types;
@@ -422,53 +491,49 @@ class MailsterWooCommerce {
 		return $tags;
 	}
 
-	public function activate() {
-		if ( function_exists( 'mailster' ) ) {
+	public function notice() {
 
-			$defaults = array(
-				'woocommerce_action'        => 'created',
-				'woocommerce_type'          => 'checkbox',
-				'woocommerce_checkbox'      => false,
-				'woocommerce_checkbox_pos'  => 'after_customer_details',
-				'woocommerce_label'         => __( 'Subscribe to our newsletter', 'mailster-woocommerce' ),
-				'woocommerce_templates'     => array(
-					'new_order'        => 0,
-					'cancelled_order'  => 0,
-					'refunded_order'   => 0,
-					'processing_order' => 0,
-					'completed_order'  => 0,
-					'invoice'          => 0,
-					'note'             => 0,
-					'reset_password'   => 0,
-					'new_account'      => 0,
-				),
-				'woocommerce-skip-user'     => true,
-				'woocommerce-double-opt-in' => true,
-				'woocommerce-css'           => true,
-			);
+		?>
+		<div class="error"><p><strong><?php printf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' ); ?></strong></p></div>
+		<?php
+	}
 
-			$mailster_options = mailster_options();
+	public static function activate() {
 
-			foreach ( $defaults as $key => $value ) {
-				if ( ! isset( $mailster_options[ $key ] ) ) {
-					mailster_update_option( $key, $value );
-				}
-			}
+		if ( ! function_exists( 'mailster' ) ) {
+			return;
 		}
 
+		$defaults = array(
+			'woocommerce_action'        => 'created',
+			'woocommerce_type'          => 'checkbox',
+			'woocommerce_checkbox_pos'  => 'after_customer_details',
+			'woocommerce_label'         => __( 'Subscribe to our newsletter', 'mailster-woocommerce' ),
+			'woocommerce_templates'     => array(
+				'new_order'        => 0,
+				'cancelled_order'  => 0,
+				'refunded_order'   => 0,
+				'processing_order' => 0,
+				'completed_order'  => 0,
+				'invoice'          => 0,
+				'note'             => 0,
+				'reset_password'   => 0,
+				'new_account'      => 0,
+			),
+			'woocommerce-skip-user'     => true,
+			'woocommerce-double-opt-in' => true,
+			'woocommerce-css'           => true,
+		);
+
+		$mailster_options = mailster_options();
+
+		foreach ( $defaults as $key => $value ) {
+			if ( ! isset( $mailster_options[ $key ] ) ) {
+				mailster_update_option( $key, $value );
+			}
+		}
 	}
 
-
-	public function deactivate() {
+	public static function deactivate() {
 	}
-
-
-	public function notice() {
-		$msg = sprintf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' );
-		?>
-		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
-		<?php
-
-	}
-
 }
