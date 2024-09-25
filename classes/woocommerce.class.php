@@ -61,8 +61,15 @@ class MailsterWooCommerce {
 			return;
 		}
 
-		if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
-			return;
+		if ( mailster_option( 'woocommerce-skip-user' ) ) {
+
+			if ( is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
+				return;
+			}
+
+			if ( mailster_get_current_user_id() ) {
+				return;
+			}
 		}
 
 		// get the location from the legacy method
@@ -486,9 +493,8 @@ class MailsterWooCommerce {
 
 	public function notice() {
 
-		$msg = sprintf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' );
 		?>
-		<div class="error"><p><strong><?php echo $msg; ?></strong></p></div>
+		<div class="error"><p><strong><?php printf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' ); ?></strong></p></div>
 		<?php
 	}
 

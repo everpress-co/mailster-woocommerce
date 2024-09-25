@@ -3,7 +3,7 @@ namespace EverPress;
 
 class MailsterWooCommerceAutomation {
 
-	private $required_version = '4.1';
+	private $required_version = '4.1.4';
 	private static $instance  = null;
 
 	private function __construct() {
@@ -74,42 +74,39 @@ class MailsterWooCommerceAutomation {
 
 				$options = mailster( 'automations' )->get_trigger_option( $workflow, 'woocommerce_product' );
 
-				// set but not included
-				if ( isset( $options['wooProducts'] ) && ! array_intersect( $product_ids, $options['wooProducts'] ) ) {
-					continue;
+				foreach ( $options as $option ) {
+
+					// product is set but order does not contain the product
+					if ( isset( $option['wooProducts'] ) && ! array_intersect( $product_ids, $option['wooProducts'] ) ) {
+						continue;
+					}
+
+					// check status if set and order is the defined one
+					if ( isset( $option['wooStatus'] ) && $status_transition_to !== $option['wooStatus'] ) {
+						continue;
+					}
+
+					// should we create a new user?
+					$create_user = isset( $option['wooCreateUser'] ) ? (bool) $option['wooCreateUser'] : false;
+
+					// get user from order and optionally create one
+					$subscriber = $this->get_subscriber_from_order( $order_id, $create_user );
+
+					if ( ! $subscriber ) {
+						continue;
+					}
+
+					// trigger workflow with the found subscriber
+					mailster( 'triggers' )->trigger( $workflow, $option['trigger'], $subscriber->ID );
 				}
-
-				// check status if set
-				if ( isset( $options['wooStatus'] ) && $status_transition_to !== $options['wooStatus'] ) {
-					continue;
-				}
-
-				$create_user = isset( $options['wooCreateUser'] ) ? (bool) $options['wooCreateUser'] : false;
-
-				$subscriber = $this->get_subscriber_from_order( $order_id, $create_user );
-
-				if ( ! $subscriber ) {
-					continue;
-				}
-
-				error_log( print_r( $subscriber, true ) );
-
-				if ( isset( $options['wooStatus'] ) && $status_transition_to !== $options['wooStatus'] ) {
-					continue;
-				}
-
-				mailster( 'triggers' )->trigger( $workflow, 'woocommerce_product', $subscriber->ID );
-
 			}
 		}
-
-		return;
 
 		$workflows = mailster( 'triggers' )->get_workflows_by_trigger( 'woocommerce_category' );
 
 		if ( $workflows ) {
 
-			// get cateogries
+			// get cateogries from the order
 			$category_ids = array();
 			foreach ( $items as $item ) {
 				$product_id = $item->get_product_id();
@@ -125,18 +122,31 @@ class MailsterWooCommerceAutomation {
 
 				$options = mailster( 'automations' )->get_trigger_option( $workflow, 'woocommerce_category' );
 
-				// not set or not included
-				if ( ! isset( $options['woo_categories'] ) || ! array_intersect( $category_ids, $options['woo_categories'] ) ) {
-					continue;
+				foreach ( $options as $option ) {
+
+					// categories are set but order does not contain the category
+					if ( isset( $option['wooCategories'] ) && ! array_intersect( $category_ids, $option['wooCategories'] ) ) {
+						continue;
+					}
+
+					// check status if set and order is the defined one
+					if ( isset( $option['wooStatus'] ) && $status_transition_to !== $option['wooStatus'] ) {
+						continue;
+					}
+
+					// should we create a new user?
+					$create_user = isset( $option['wooCreateUser'] ) ? (bool) $option['wooCreateUser'] : false;
+
+					// get user from order and optionally create one
+					$subscriber = $this->get_subscriber_from_order( $order_id, $create_user );
+
+					if ( ! $subscriber ) {
+						continue;
+					}
+
+					// trigger workflow with the found subscriber
+					mailster( 'triggers' )->trigger( $workflow, $option['trigger'], $subscriber->ID );
 				}
-
-				// check status if set
-				if ( isset( $options['woo_status'] ) && $status_transition_to !== $options['woo_status'] ) {
-					continue;
-				}
-
-				mailster( 'triggers' )->trigger( $workflow, 'woocommerce_product', $subscriber_id );
-
 			}
 		}
 	}

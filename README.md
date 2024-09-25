@@ -2,9 +2,9 @@
 
 Contributors: everpress, mailster, xaverb  
 Tags: mailster, newsletter, ecommerce, leads, woocommerce  
-Requires at least: 6.0  
-Tested up to: 6.5  
-Stable tag: 1.7.1  
+Requires at least: 6.2  
+Tested up to: 6.6  
+Stable tag: 2.0.0  
 License: GPLv2 or later
 
 ## Description
@@ -30,6 +30,14 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
+
+### 2.0.0
+
+- new: Trigger for Mailster automations "Bought product"
+- new: Trigger for Mailster automations "Bought in a product category"
+- improved: better support for checkbox in new block based checkout
+- some checkbox placement were deprecated as they no longer work on block based checkout
+- new trigger require Mailster version 4.1.4 or above
 
 ### 1.7.1
 

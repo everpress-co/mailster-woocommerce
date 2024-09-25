@@ -53,6 +53,17 @@ export default function Selector(props) {
 					/>
 				</BaseControl>
 			</PanelRow>
+
+			{!wooStatus && (
+				<PanelRow>
+					<Tip>
+						{__(
+							"This workflow may run multiple times since order statuses can change repeatedly. To control the frequency, specify how often this trigger can be activated in the settings below.",
+							"mailster-woocommerce",
+						)}
+					</Tip>
+				</PanelRow>
+			)}
 			<PanelRow>
 				<BaseControl label={__("Subscriber", "mailster-woocommerce")}>
 					<CheckboxControl
@@ -73,18 +84,6 @@ export default function Selector(props) {
 					/>
 				</BaseControl>
 			</PanelRow>
-			{!wooStatus ? (
-				<PanelRow>
-					<Tip>
-						{__(
-							"This workflow may run multiple times since order statuses can change repeatedly. To control the frequency, specify how often this trigger can be activated in the settings below.",
-							"mailster-woocommerce",
-						)}
-					</Tip>
-				</PanelRow>
-			) : (
-				<> </>
-			)}
 		</>
 	);
 }
