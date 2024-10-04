@@ -48,7 +48,7 @@ class MailsterWooCommerce {
 		add_filter( 'mailster_dynamic_post_types', array( &$this, 'add_woocommerce_post_types' ), 10, 2 );
 		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
 
-		add_action( 'woocommerce_init', array( &$this, 'register_additional_checkout_fields' ) );
+		add_action( 'woocommerce_blocks_loaded', array( &$this, 'register_additional_checkout_fields' ) );
 	}
 
 	public function register_additional_checkout_fields() {
@@ -96,7 +96,6 @@ class MailsterWooCommerce {
 				'optionalLabel' => esc_html( mailster_option( 'woocommerce_label' ) ),
 				'location'      => $location,
 				'type'          => 'checkbox',
-				'default'       => 'checked',
 
 			)
 		);
@@ -262,6 +261,10 @@ class MailsterWooCommerce {
 
 		$order = wc_get_order( $order_id );
 
+		if ( ! $order ) {
+			return;
+		}
+
 		$value = $order->get_meta( '_wc_other/mailster/subscribe' );
 
 		// always signup if auto is enabled
@@ -269,20 +272,15 @@ class MailsterWooCommerce {
 			$value = true;
 		}
 
-		// subscribe
-		if ( $value ) {
-			$action = mailster_option( 'woocommerce_action' );
-			if ( 'completed' == $action ) {
-				$wc_object->update_meta_data( 'mailster_signup', true, true );
-			} elseif ( 'created' == $action ) {
-				$this->subscribe( $order_id );
-			}
-			// unsubscribe
-		} else {
-			// get email from order
-			$email = $order->get_billing_email();
-			mailster( 'subscribers' )->unsubscribe_by_mail( $email );
+		if ( ! $value ) {
+			return;
+		}
 
+		$action = mailster_option( 'woocommerce_action' );
+		if ( 'completed' == $action ) {
+			$order->update_meta_data( 'mailster_signup', true, true );
+		} elseif ( 'created' == $action ) {
+			$this->subscribe( $order_id );
 		}
 	}
 
@@ -372,6 +370,7 @@ class MailsterWooCommerce {
 
 		$default   = $file;
 		$templates = mailster_option( 'woocommerce_templates', array() );
+
 		add_filter( 'mailster_wp_mail_htmlify', '__return_false' );
 
 		switch ( $current_filter ) {
@@ -454,7 +453,7 @@ class MailsterWooCommerce {
 		if ( $output === 'names' ) {
 			$post_types[] = 'shop_coupon';
 		} elseif ( isset( $wp_post_types['shop_coupon'] ) ) {
-				$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
+			$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
 		}
 
 		return $post_types;

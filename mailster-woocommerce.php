@@ -7,7 +7,7 @@ Plugin Name: Mailster for WooCommerce
 Requires Plugins: mailster, woocommerce
 Plugin URI: https://mailster.co/?utm_campaign=wporg&utm_source=wordpress.org&utm_medium=readme&utm_term=WooCommerce
 Description: add your WooCommerce customers to your Mailster lists
-Version: 2.0.0
+Version: 2.0.1
 Author: EverPress
 Author URI: https://mailster.co
 Text Domain: mailster-woocommerce
