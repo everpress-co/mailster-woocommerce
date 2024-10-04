@@ -17,6 +17,17 @@
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start"
 	},
+	"files": [
+		"*.php",
+		"build",
+		"classes",
+		"languages",
+		"includes",
+		"src",
+		"vendor",
+		"views",
+		"assets"
+	],
 	"dependencies": {
 		"react-select": "^5.2.2"
 	},
