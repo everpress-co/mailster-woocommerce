@@ -61,7 +61,7 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ### 1.6
 
-- new: option to disable WooCommerece style in email
+- new: option to disable WooCommerce style in email
 
 ### 1.5
 

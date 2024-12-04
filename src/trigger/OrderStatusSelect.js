@@ -14,8 +14,6 @@ import {
 	Tip,
 	CheckboxControl,
 	PanelRow,
-	Panel,
-	PanelBody,
 } from '@wordpress/components';
 
 /**
