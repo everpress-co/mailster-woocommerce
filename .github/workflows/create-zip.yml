@@ -1,5 +1,5 @@
 ---
-name: "Create Zip"
+name: 'Create Zip'
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ on:
 permissions: write-all
 jobs:
   create-zip:
-    name: "Create Zip"
-    runs-on: "ubuntu-latest"
+    name: 'Create Zip'
+    runs-on: 'ubuntu-latest'
     outputs:
       version: ${{ steps.read_version.outputs.version }}
       zip_name: ${{ steps.zip_project.outputs.zip_name }}
@@ -33,8 +33,8 @@ jobs:
 
       - name: 🤞 Install dependencies
         run: |
-          npm install
-          composer install --no-dev
+          [ -f "package.json" ] && npm install --no-fund --silent || echo "No package.json file found"
+          [ -f "composer.json" ] && composer install --no-dev --quiet || echo "No composer.json file found"
 
       - name: 📚 Convert Readme.md to WordPress Readme
         uses: everpress-co/action-md2wp@main
