@@ -60,7 +60,6 @@ jobs:
 
       - name: 🧹 Cleanup
         run: |
-          echo "Cleanup"
           rm -f README.md
 
       - name: 🗜️ Zip the contents of the dist directory with project name and version

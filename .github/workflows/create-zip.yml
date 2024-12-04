@@ -33,8 +33,8 @@ jobs:
 
       - name: 🤞 Install dependencies
         run: |
-          [ -f "composer.json" ] && composer install --no-dev --quiet || true
           [ -f "package.json" ] && npm install --no-fund --silent || echo "No package.json file found"
+          [ -f "composer.json" ] && composer install --no-dev --quiet || echo "No composer.json file found"
 
       - name: 📚 Convert Readme.md to WordPress Readme
         uses: everpress-co/action-md2wp@main
