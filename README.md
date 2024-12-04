@@ -3,8 +3,8 @@
 Contributors: everpress, mailster, xaverb  
 Tags: mailster, newsletter, ecommerce, leads, woocommerce  
 Requires at least: 6.2  
-Tested up to: 6.6  
-Stable tag: 2.0.1  
+Tested up to: 6.7  
+Stable tag: 2.0.2  
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -32,6 +32,10 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Changelog
 
+### 2.0.2
+
+- fixed: correctly loading 'load_plugin_textdomain' hook
+
 ### 2.0.1
 
 - fixed: PHP Warning-
@@ -57,7 +61,7 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ### 1.6
 
-- new: option to disable WooCommerece style in email
+- new: option to disable WooCommerce style in email
 
 ### 1.5
 

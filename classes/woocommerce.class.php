@@ -13,12 +13,11 @@ class MailsterWooCommerce {
 		$this->plugin_path = plugin_dir_path( MAILSTER_WOOCOMMERCE_FILE );
 		$this->plugin_url  = plugin_dir_url( MAILSTER_WOOCOMMERCE_FILE );
 
-		load_plugin_textdomain( 'mailster-woocommerce' );
-
 		if ( ! function_exists( 'mailster' ) ) {
 			add_action( 'admin_notices', array( &$this, 'notice' ) );
 			return;
 		}
+		add_action( 'init', array( &$this, 'init' ) );
 
 		add_filter( 'mailster_setting_sections', array( &$this, 'settings_tab' ) );
 		add_action( 'mailster_section_tab_woocommerce', array( &$this, 'settings' ) );
@@ -49,6 +48,10 @@ class MailsterWooCommerce {
 		add_filter( 'mailster_editor_tags', array( &$this, 'add_woocommerce_tags' ) );
 
 		add_action( 'woocommerce_blocks_loaded', array( &$this, 'register_additional_checkout_fields' ) );
+	}
+
+	public function init() {
+		load_plugin_textdomain( 'mailster-woocommerce' );
 	}
 
 	public function register_additional_checkout_fields() {
