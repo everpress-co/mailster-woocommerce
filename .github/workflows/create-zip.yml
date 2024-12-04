@@ -33,8 +33,8 @@ jobs:
 
       - name: 🤞 Install dependencies
         run: |
+          [ -f "composer.json" ] && composer install --no-dev --quiet || true
           [ -f "package.json" ] && npm install --no-fund --silent || echo "No package.json file found"
-          [ -f "composer.json" ] && composer install --no-dev --quiet ||
 
       - name: 📚 Convert Readme.md to WordPress Readme
         uses: everpress-co/action-md2wp@main
@@ -45,6 +45,7 @@ jobs:
 
       - name: 🗜️ Zip the contents of the dist directory with project name and version
         id: zip_project
+        if: ${{ !env.ACT }}
         run: |
           ZIP_NAME="${{ steps.read_version.outputs.project_name }}.zip"
           npm run plugin-zip
