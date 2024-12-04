@@ -6,7 +6,7 @@
  * WordPress dependencies
  */
 
-import { __ } from "@wordpress/i18n";
+import { __ } from '@wordpress/i18n';
 
 import {
 	BaseControl,
@@ -16,13 +16,13 @@ import {
 	PanelRow,
 	Panel,
 	PanelBody,
-} from "@wordpress/components";
+} from '@wordpress/components';
 
 /**
  * Internal dependencies
  */
 
-import { ORDER_STATUS } from "./constants";
+import { ORDER_STATUS } from './constants';
 
 export default function Selector(props) {
 	const { attributes, setAttributes } = props;
@@ -32,17 +32,15 @@ export default function Selector(props) {
 	return (
 		<>
 			<PanelRow>
-				<BaseControl>
+				<BaseControl __nextHasNoMarginBottom>
 					<TreeSelect
-						label={__("Order Status", "mailster-woocommerce")}
+						__nextHasNoMarginBottom
+						label={__('Order Status', 'mailster-woocommerce')}
 						help={__(
-							"Define the orderstatus for the trigger",
-							"mailster-woocommerce",
+							'Define the orderstatus for the trigger',
+							'mailster-woocommerce'
 						)}
-						noOptionLabel={__(
-							"Any Order Status",
-							"mailster-woocommerce",
-						)}
+						noOptionLabel={__('Any Order Status', 'mailster-woocommerce')}
 						onChange={(newStatus) =>
 							setAttributes({
 								wooStatus: newStatus ? newStatus : undefined,
@@ -58,22 +56,26 @@ export default function Selector(props) {
 				<PanelRow>
 					<Tip>
 						{__(
-							"This workflow may run multiple times since order statuses can change repeatedly. To control the frequency, specify how often this trigger can be activated in the settings below.",
-							"mailster-woocommerce",
+							'This workflow may run multiple times since order statuses can change repeatedly. To control the frequency, specify how often this trigger can be activated in the settings below.',
+							'mailster-woocommerce'
 						)}
 					</Tip>
 				</PanelRow>
 			)}
 			<PanelRow>
-				<BaseControl label={__("Subscriber", "mailster-woocommerce")}>
+				<BaseControl
+					__nextHasNoMarginBottom
+					label={__('Subscriber', 'mailster-woocommerce')}
+				>
 					<CheckboxControl
+						__nextHasNoMarginBottom
 						label={__(
-							"Create subscriber if not exists",
-							"mailster-woocommerce",
+							'Create subscriber if not exists',
+							'mailster-woocommerce'
 						)}
 						help={__(
-							"This will create a subscriber if the user does not exist in the database.",
-							"mailster-woocommerce",
+							'This will create a subscriber if the user does not exist in the database.',
+							'mailster-woocommerce'
 						)}
 						checked={wooCreateUser}
 						onChange={(createUser) =>

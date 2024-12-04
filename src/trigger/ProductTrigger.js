@@ -6,28 +6,22 @@
  * WordPress dependencies
  */
 
-import { __ } from "@wordpress/i18n";
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
 
-import { ORDER_STATUS } from "./constants";
-import { useProducts } from "./functions";
+import { ORDER_STATUS } from './constants';
+import { useProducts } from './functions';
 
 export default function Trigger(props) {
 	const { attributes, setAttributes } = props;
 
 	const { wooProducts, wooStatus, wooCreateUser } = attributes;
 
-	const {
-		hasResolved,
-		isResolving,
-		records,
-		status,
-		totalItems,
-		totalPages,
-	} = useProducts({ include: wooProducts });
+	const { hasResolved, isResolving, records, status, totalItems, totalPages } =
+		useProducts({ include: wooProducts });
 
 	const orderStatus = ORDER_STATUS.find((item) => item.id === wooStatus);
 
@@ -40,13 +34,13 @@ export default function Trigger(props) {
 			<p>
 				{wooProducts
 					? __(
-							"When someone buys one of the following products:",
-							"mailster-woocommerce",
-						)
+							'When someone buys one of the following products:',
+							'mailster-woocommerce'
+					  )
 					: __(
-							"When someone buys any product from your store",
-							"mailster-woocommerce",
-						)}
+							'When someone buys any product from your store',
+							'mailster-woocommerce'
+					  )}
 			</p>
 			<p>
 				{records.map((record) => {
@@ -61,25 +55,18 @@ export default function Trigger(props) {
 				<>
 					<p>
 						{__(
-							"and the status of the order is changed to",
-							"mailster-woocommerce",
+							'and the status of the order is changed to',
+							'mailster-woocommerce'
 						)}
 					</p>
 					<p>
-						<strong className="mailster-step-badge">
-							{orderStatus.name}
-						</strong>
+						<strong className="mailster-step-badge">{orderStatus.name}</strong>
 					</p>
 				</>
 			)}
 			{wooCreateUser && (
 				<p>
-					<i>
-						{__(
-							"Create subscriber if not exists",
-							"mailster-woocommerce",
-						)}
-					</i>
+					<i>{__('Create subscriber if not exists', 'mailster-woocommerce')}</i>
 				</p>
 			)}
 		</>

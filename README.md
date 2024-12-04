@@ -3,8 +3,8 @@
 Contributors: everpress, mailster, xaverb  
 Tags: mailster, newsletter, ecommerce, leads, woocommerce  
 Requires at least: 6.2  
-Tested up to: 6.6  
-Stable tag: 2.0.1  
+Tested up to: 6.7  
+Stable tag: 2.0.2  
 Requires PHP: 7.4
 License: GPLv2 or later
 
@@ -31,6 +31,10 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
+
+### 2.0.2
+
+- fixed: correctly loading 'load_plugin_textdomain' hook
 
 ### 2.0.1
 

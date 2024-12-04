@@ -62,7 +62,7 @@ export default function Selector(props) {
 
 	return (
 		<>
-			<BaseControl label={help}>
+			<BaseControl __nextHasNoMarginBottom label={help}>
 				<Select
 					options={suggestions}
 					value={selectedTokens}

@@ -8,7 +8,6 @@
 
 import { __ } from '@wordpress/i18n';
 
-
 /**
  * Internal dependencies
  */
@@ -19,7 +18,7 @@ import { useCategories } from './functions';
 export default function Trigger(props) {
 	const { attributes, setAttributes } = props;
 
-	const { wooCategories, wooStatus,wooCreateUser } = attributes;
+	const { wooCategories, wooStatus, wooCreateUser } = attributes;
 
 	const { hasResolved, isResolving, records, status, totalItems, totalPages } =
 		useCategories({ include: wooCategories });
@@ -73,12 +72,7 @@ export default function Trigger(props) {
 			)}
 			{wooCreateUser && (
 				<p>
-					<i>
-						{__(
-							"Create subscriber if not exists",
-							"mailster-woocommerce",
-						)}
-					</i>
+					<i>{__('Create subscriber if not exists', 'mailster-woocommerce')}</i>
 				</p>
 			)}
 		</>
