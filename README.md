@@ -32,6 +32,8 @@ Read more about the add on on our [knowledge base](https://kb.mailster.co/mailst
 
 ## Changelog
 
+### Unreleased
+
 ### 2.0.2
 
 - fixed: correctly loading 'load_plugin_textdomain' hook

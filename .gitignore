@@ -1,5 +1,5 @@
 /nbproject/private/
-node_modules
+node_modules/
 project.xml
 project.properties
 .DS_Store
@@ -18,13 +18,27 @@ screenshots/
 # Ignore all log files except for .htaccess
 /logs/*
 !/logs/.htaccess
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 tests/e2e/config/local-*
 .eslintcache
+coverage
+.npm
 
 /vendor/
+vendor/
 
 dist
 build
 
+*.tgz
+*.zip
 test.zip
+
+.env
+.cursor/
+readme.txt
