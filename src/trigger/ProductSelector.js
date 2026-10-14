@@ -23,6 +23,16 @@ import { BaseControl } from '@wordpress/components';
 import OrderStatusSelect from './OrderStatusSelect';
 import { useProducts, mapResult } from './functions';
 
+/**
+ * Product multi-select UI for the WooCommerce product workflow trigger.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object}   props              Block edit props.
+ * @param {Object}   props.attributes   Trigger block attributes.
+ * @param {Function} props.setAttributes Updates block attributes.
+ * @return {JSX.Element} Selector controls.
+ */
 export default function Selector(props) {
 	const { attributes, setAttributes } = props;
 
@@ -54,6 +64,14 @@ export default function Selector(props) {
 
 	const searchTokensDebounce = useDebounce(setToken, 500);
 
+	/**
+	 * Persists selected product IDs on the trigger block.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param {Array<{value: number, label: string}>} tokens Selected options.
+	 * @return {void}
+	 */
 	function setTokens(tokens) {
 		const ids = tokens.map((token) => token.value);
 		setAttributes({ wooProducts: ids.length ? ids : undefined });

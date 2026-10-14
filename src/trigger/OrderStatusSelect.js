@@ -22,6 +22,16 @@ import {
 
 import { ORDER_STATUS } from './constants';
 
+/**
+ * Order status and subscriber-creation controls for WooCommerce triggers.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object}   props              Block edit props.
+ * @param {Object}   props.attributes   Trigger block attributes.
+ * @param {Function} props.setAttributes Updates block attributes.
+ * @return {JSX.Element} Status and subscriber controls.
+ */
 export default function Selector(props) {
 	const { attributes, setAttributes } = props;
 

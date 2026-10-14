@@ -1,4 +1,11 @@
 <?php
+/**
+ * Mailster settings UI for the WooCommerce integration.
+ *
+ * @since 1.0
+ *
+ * @package EverPress
+ */
 
 $templatefiles = mailster( 'templates' )->get_files( mailster_option( 'default_template' ) );
 

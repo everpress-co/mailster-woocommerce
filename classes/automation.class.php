@@ -1,11 +1,36 @@
 <?php
 namespace EverPress;
 
+/**
+ * WooCommerce automation triggers for Mailster workflows.
+ *
+ * @since 2.0.0
+ */
 class MailsterWooCommerceAutomation {
 
+	/**
+	 * Minimum Mailster version required for automation triggers.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var string
+	 */
 	private $required_version = '4.1.4';
-	private static $instance  = null;
 
+	/**
+	 * Singleton instance.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var MailsterWooCommerceAutomation|null
+	 */
+	private static $instance = null;
+
+	/**
+	 * Hooks WooCommerce order changes into Mailster automation triggers.
+	 *
+	 * @since 2.0.0
+	 */
 	private function __construct() {
 
 		add_action( 'mailster_workflow_triggers', array( &$this, 'triggers' ) );
@@ -13,6 +38,13 @@ class MailsterWooCommerceAutomation {
 		add_action( 'woocommerce_order_status_changed', array( &$this, 'order_status_changed' ), 10, 4 );
 	}
 
+	/**
+	 * Returns the singleton instance.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return MailsterWooCommerceAutomation Instance.
+	 */
 	public static function get_instance() {
 		if ( self::$instance == null ) {
 			self::$instance = new MailsterWooCommerceAutomation();
@@ -21,6 +53,15 @@ class MailsterWooCommerceAutomation {
 		return self::$instance;
 	}
 
+	/**
+	 * Resolves a Mailster subscriber from a WooCommerce order.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int  $order_id Order ID.
+	 * @param bool $create   Optional. Create a subscriber when none exists. Default false.
+	 * @return object|null Subscriber object, or null when none found.
+	 */
 	private function get_subscriber_from_order( $order_id, $create = false ) {
 		$order = wc_get_order( $order_id );
 
@@ -54,6 +95,17 @@ class MailsterWooCommerceAutomation {
 		return $subscriber;
 	}
 
+	/**
+	 * Fires product and category automation workflows when an order status changes.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int      $order_id               Order ID.
+	 * @param string   $status_transition_from Previous order status.
+	 * @param string   $status_transition_to   New order status.
+	 * @param WC_Order $that                   Order object.
+	 * @return void
+	 */
 	public function order_status_changed( $order_id, $status_transition_from, $status_transition_to, $that ) {
 
 		$order = wc_get_order( $order_id );
@@ -152,6 +204,14 @@ class MailsterWooCommerceAutomation {
 	}
 
 
+	/**
+	 * Registers WooCommerce product and category triggers for Mailster workflows.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param array $triggers Existing workflow triggers.
+	 * @return array Triggers including WooCommerce entries.
+	 */
 	public function triggers( $triggers ) {
 
 		$supported = version_compare( MAILSTER_VERSION, $this->required_version, '>=' );
@@ -177,6 +237,13 @@ class MailsterWooCommerceAutomation {
 	}
 
 
+	/**
+	 * Enqueues block editor scripts for WooCommerce workflow triggers.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
 	public function enqueue_block_editor_assets() {
 
 		if ( 'mailster-workflow' !== get_post_type() ) {

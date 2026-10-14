@@ -2,12 +2,45 @@
 
 namespace EverPress;
 
+/**
+ * Integrates Mailster with WooCommerce checkout, orders, and emails.
+ *
+ * @since 1.0
+ */
 class MailsterWooCommerce {
 
+	/**
+	 * Absolute filesystem path to the plugin directory.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	private $plugin_path;
+
+	/**
+	 * URL to the plugin directory.
+	 *
+	 * @since 1.0
+	 *
+	 * @var string
+	 */
 	private $plugin_url;
+
+	/**
+	 * Singleton instance.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @var MailsterWooCommerce|null
+	 */
 	private static $instance = null;
 
+	/**
+	 * Registers WooCommerce and Mailster hooks for this integration.
+	 *
+	 * @since 1.0
+	 */
 	private function __construct() {
 
 		$this->plugin_path = plugin_dir_path( MAILSTER_WOOCOMMERCE_FILE );
@@ -50,10 +83,24 @@ class MailsterWooCommerce {
 		add_action( 'woocommerce_blocks_loaded', array( &$this, 'register_additional_checkout_fields' ) );
 	}
 
+	/**
+	 * Loads the plugin text domain.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function init() {
 		load_plugin_textdomain( 'mailster-woocommerce' );
 	}
 
+	/**
+	 * Registers the Mailster subscribe checkbox for block-based checkout.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return void
+	 */
 	public function register_additional_checkout_fields() {
 
 		if ( ! function_exists( 'woocommerce_register_additional_checkout_field' ) ) {
@@ -105,6 +152,13 @@ class MailsterWooCommerce {
 	}
 
 
+	/**
+	 * Returns the singleton instance.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @return MailsterWooCommerce Instance.
+	 */
 	public static function get_instance() {
 		if ( self::$instance == null ) {
 			self::$instance = new MailsterWooCommerce();
@@ -113,16 +167,38 @@ class MailsterWooCommerce {
 		return self::$instance;
 	}
 
+	/**
+	 * Adds a Mailster tab to the WooCommerce settings tabs.
+	 *
+	 * @since 1.0
+	 *
+	 * @param array $settings_tabs Existing WooCommerce settings tabs.
+	 * @return array Tabs including Mailster.
+	 */
 	public function add_settings_tab( $settings_tabs ) {
 
 		$settings_tabs['mailster'] = 'Mailster';
 		return $settings_tabs;
 	}
 
+	/**
+	 * Renders WooCommerce admin fields for the Mailster settings tab.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function mailster_settings_tab() {
 		woocommerce_admin_fields( $this->get_mailster_settings() );
 	}
 
+	/**
+	 * Points admins to Mailster settings from the WooCommerce settings screen.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function woocommerce_settings_mailster() {
 
 		echo '<h2>' . esc_html__( 'Settings can be found on the WooCommerce Settings page', 'mailster-woocommerce' ) . '</h2>';
@@ -132,6 +208,13 @@ class MailsterWooCommerce {
 		echo '<style>input.woocommerce-save-button{display:none !important;}</style>';
 	}
 
+	/**
+	 * Returns the WooCommerce settings field definitions for Mailster.
+	 *
+	 * @since 1.0
+	 *
+	 * @return array Settings fields.
+	 */
 	public function get_mailster_settings() {
 
 		return apply_filters(
@@ -147,6 +230,13 @@ class MailsterWooCommerce {
 		);
 	}
 
+	/**
+	 * Builds a list ID to name map for WooCommerce select fields.
+	 *
+	 * @since 1.0
+	 *
+	 * @return array List options keyed by ID.
+	 */
 	public function mailster_lists() {
 		$lists = mailster( 'lists' )->get();
 
@@ -160,10 +250,12 @@ class MailsterWooCommerce {
 	}
 
 	/**
+	 * Inserts the WooCommerce section into Mailster settings tabs.
 	 *
+	 * @since 1.0
 	 *
-	 * @param unknown $settings
-	 * @return unknown
+	 * @param array $settings Mailster setting sections.
+	 * @return array Updated setting sections.
 	 */
 	public function settings_tab( $settings ) {
 
@@ -175,11 +267,26 @@ class MailsterWooCommerce {
 		return $settings;
 	}
 
+	/**
+	 * Registers the Mailster lists metabox on product edit screens.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function add_mailster_product_metabox() {
 
 		add_meta_box( 'mailster_product_metabox', 'Mailster', array( &$this, 'mailster_product_metabox' ), 'product', 'side', 'core' );
 	}
 
+	/**
+	 * Renders the product metabox for list assignment.
+	 *
+	 * @since 1.0
+	 *
+	 * @param WP_Post $post Product post object.
+	 * @return void
+	 */
 	public function mailster_product_metabox( $post ) {
 
 		wp_nonce_field( 'mailster_woocommerce_lists_nonce', 'mailster_woocommerce_lists_nonce' );
@@ -198,6 +305,15 @@ class MailsterWooCommerce {
 		<?php
 	}
 
+	/**
+	 * Saves Mailster list selections when a product is saved.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int     $post_id Product post ID.
+	 * @param WP_Post $post    Product post object.
+	 * @return void
+	 */
 	public function save_product( $post_id, $post ) {
 
 		if ( empty( $post ) || $post->post_type != 'product' ) {
@@ -220,16 +336,38 @@ class MailsterWooCommerce {
 		update_post_meta( $post_id, '_mailster_lists', $lists );
 	}
 
+	/**
+	 * Includes the legacy metabox view template.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function metabox() {
 
 		include $this->plugin_path . '/views/metabox.php';
 	}
 
+	/**
+	 * Includes the Mailster WooCommerce settings view.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function settings() {
 
 		include $this->plugin_path . '/views/settings.php';
 	}
 
+	/**
+	 * Optionally replaces WooCommerce email CSS when Mailster system mail is enabled.
+	 *
+	 * @since 1.6
+	 *
+	 * @param string $css WooCommerce email CSS.
+	 * @return string Filtered CSS.
+	 */
 	public function maybe_remove_css( $css ) {
 		if ( mailster_option( 'system_mail' ) && mailster_option( 'woocommerce-css' ) ) {
 			$css = '.td{border:0;border-bottom: 1px solid;padding:4px;}';
@@ -240,6 +378,14 @@ class MailsterWooCommerce {
 
 
 
+	/**
+	 * Handles classic checkout signup and queues or creates a subscription.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $order_id Order ID.
+	 * @return void
+	 */
 	public function on_checkout( $order_id ) {
 
 		if ( ( 'checkbox' == mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ) )
@@ -253,6 +399,14 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Subscribes the customer when a queued order reaches completed status.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $order_id Order ID.
+	 * @return void
+	 */
 	public function on_completed( $order_id ) {
 
 		if ( get_post_meta( $order_id, 'mailster_signup', true ) ) {
@@ -260,6 +414,14 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Handles block checkout subscribe consent on the thank-you page.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int $order_id Order ID.
+	 * @return void
+	 */
 	public function thankyou( $order_id ) {
 
 		$order = wc_get_order( $order_id );
@@ -287,6 +449,14 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Creates or updates a Mailster subscriber from a WooCommerce order.
+	 *
+	 * @since 1.0
+	 *
+	 * @param int $order_id Order ID.
+	 * @return int|WP_Error|null Subscriber ID on success, error or null on failure.
+	 */
 	public function subscribe( $order_id ) {
 
 		// get order by id
@@ -346,6 +516,13 @@ class MailsterWooCommerce {
 		return $subscriber_id;
 	}
 
+	/**
+	 * Outputs the classic checkout newsletter checkbox or hidden signup field.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function checkbox() {
 
 		if ( 'auto' == mailster_option( 'woocommerce_type' ) ) {
@@ -369,6 +546,16 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Maps WooCommerce email contexts to configured Mailster templates.
+	 *
+	 * @since 1.0
+	 *
+	 * @param string $file           Current template file path.
+	 * @param mixed  $caller         Caller context from Mailster.
+	 * @param string $current_filter Current WordPress filter or notification key.
+	 * @return string Template file path to use.
+	 */
 	public function set_template( $file, $caller, $current_filter ) {
 
 		$default   = $file;
@@ -443,6 +630,14 @@ class MailsterWooCommerce {
 		return $file ? $file : $default;
 	}
 
+	/**
+	 * Removes WooCommerce email header and footer when Mailster sends system mail.
+	 *
+	 * @since 1.0
+	 *
+	 * @param WC_Emails $wooEmailObj WooCommerce emails instance.
+	 * @return void
+	 */
 	public function remove_header_and_footer( $wooEmailObj ) {
 		if ( mailster_option( 'system_mail' ) ) {
 			remove_action( 'woocommerce_email_header', array( $wooEmailObj, 'email_header' ) );
@@ -450,6 +645,15 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Adds WooCommerce coupon post types to Mailster dynamic content.
+	 *
+	 * @since 1.7
+	 *
+	 * @param array  $post_types Existing post types.
+	 * @param string $output     Optional. Return format: names or objects. Default names.
+	 * @return array Filtered post types.
+	 */
 	public function add_woocommerce_post_types( $post_types, $output = 'names' ) {
 		global $wp_post_types;
 
@@ -462,6 +666,14 @@ class MailsterWooCommerce {
 		return $post_types;
 	}
 
+	/**
+	 * Adds WooCommerce coupon editor tags for Mailster campaigns.
+	 *
+	 * @since 1.7
+	 *
+	 * @param array $tags Existing Mailster editor tags.
+	 * @return array Tags including WooCommerce coupons.
+	 */
 	public function add_woocommerce_tags( $tags ) {
 
 		$coupons = get_posts(
@@ -493,6 +705,13 @@ class MailsterWooCommerce {
 		return $tags;
 	}
 
+	/**
+	 * Shows an admin notice when Mailster is not active.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public function notice() {
 
 		?>
@@ -500,6 +719,13 @@ class MailsterWooCommerce {
 		<?php
 	}
 
+	/**
+	 * Sets default Mailster options on plugin activation.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public static function activate() {
 
 		if ( ! function_exists( 'mailster' ) ) {
@@ -536,6 +762,13 @@ class MailsterWooCommerce {
 		}
 	}
 
+	/**
+	 * Runs on plugin deactivation.
+	 *
+	 * @since 1.0
+	 *
+	 * @return void
+	 */
 	public static function deactivate() {
 	}
 }
