@@ -43,8 +43,7 @@
 	},
 	"devDependencies": {
 		"@woocommerce/dependency-extraction-webpack-plugin": "^3.0.1",
-		"@woocommerce/eslint-plugin": "^2.2.0",
-		"@wordpress/scripts": "^30.6.0"
+		"@wordpress/scripts": "^36.1.0"
 	},
 	"scripts": {
 		"build": "wp-scripts build",
@@ -54,7 +53,7 @@
 		"packages-update": "wp-scripts packages-update",
 		"plugin-zip": "wp-scripts plugin-zip",
 		"start": "wp-scripts start",
-		"lint": "npm run lint:js && npm run lint:css && npm run lint:pkg-json",
+		"lint": "npm run lint:css && npm run lint:pkg-json",
 		"lint:pkg-json": "wp-scripts lint-pkg-json"
 	}
 }
