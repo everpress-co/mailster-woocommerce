@@ -1,13 +1,17 @@
 <?xml version="1.0"?>
-<ruleset name="WordPress Coding Standards for Mailster Plugin">
+<ruleset name="WordPress Coding Standards for Mailster for WooCommerce">
 	<description>Sniffs for WordPress plugins, with minor modifications for Mailster</description>
 
-	<config name="testVersion" value="5.6-"/>
+	<config name="testVersion" value="7.4-"/>
+	<config name="minimum_wp_version" value="6.0"/>
 
-	<rule ref="WordPress-Core"/>
+	<rule ref="WordPress-Core">
+		<!-- Mailster addons use *.class.php filenames. -->
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
 	<rule ref="WordPress-Docs"/>
 	<rule ref="WordPress.WP.I18n"/>
-	<rule ref="WordPress.CodeAnalysis.EmptyStatement"/>
+	<config name="text_domain" value="mailster-woocommerce"/>
 
 	<rule ref="PEAR.Functions.FunctionCallSignature">
 		<properties>
@@ -15,17 +19,24 @@
 		</properties>
 	</rule>
 
-	<rule ref="WordPress"/>
+	<rule ref="WordPress">
+		<!-- Mailster addons use *.class.php filenames. -->
+		<exclude name="WordPress.Files.FileName"/>
+	</rule>
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
-			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
-			<property name="prefixes" type="array" value="mailster-block-forms"/>
+			<property name="prefixes" type="array">
+				<element value="mailster"/>
+				<element value="mailster_woocommerce"/>
+				<element value="EverPress"/>
+			</property>
 		</properties>
 	</rule>
 	<rule ref="WordPress.WP.I18n">
 		<properties>
-			<!-- Value: replace the text domain used. -->
-			<property name="text_domain" type="array" value="mailster-block-forms"/>
+			<property name="text_domain" type="array">
+				<element value="mailster-woocommerce"/>
+			</property>
 		</properties>
 	</rule>
 
@@ -35,12 +46,15 @@
 	<!-- Rules: WordPress Coding Standards -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards -->
 	<!-- https://github.com/WordPress-Coding-Standards/WordPress-Coding-Standards/wiki/Customizable-sniff-properties -->
-	<config name="minimum_supported_wp_version" value="4.6"/>
+	<config name="minimum_supported_wp_version" value="6.0"/>
 	<file>./</file>
+	<exclude-pattern>*/classes/libs/*</exclude-pattern>
 	<exclude-pattern>*.js</exclude-pattern>
 	<exclude-pattern>*.css</exclude-pattern>
 
+	<exclude-pattern>*/assets/css/libs/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
+	<exclude-pattern>*/build/*</exclude-pattern>
 
 </ruleset>

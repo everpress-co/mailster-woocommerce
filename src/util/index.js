@@ -23,6 +23,16 @@ import { useBlockEditContext } from '@wordpress/block-editor';
  * Internal dependencies
  */
 
+/**
+ * Renders a Mailster knowledge base help beacon link.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object} props       Component props.
+ * @param {string} props.id    Knowledge base article slug.
+ * @param {string} [props.align] Optional CSS float alignment.
+ * @return {JSX.Element} Anchor element.
+ */
 export function HelpBeacon({ id, align }) {
 	const href = new URL('https://kb.mailster.co/' + id);
 	href.searchParams.set('utm_campaign', 'plugin');
@@ -46,6 +56,15 @@ export function HelpBeacon({ id, align }) {
 	);
 }
 
+/**
+ * Runs an effect on dependency updates, skipping the first render.
+ *
+ * @since 2.0.0
+ *
+ * @param {Function} callback      Effect callback.
+ * @param {Array}    dependencies Dependency list.
+ * @return {void}
+ */
 export function useUpdateEffectCustom(callback, dependencies) {
 	const firstRenderRef = useRef(true);
 
@@ -58,6 +77,15 @@ export function useUpdateEffectCustom(callback, dependencies) {
 	}, dependencies);
 }
 
+/**
+ * Runs an effect after the component has mounted.
+ *
+ * @since 2.0.0
+ *
+ * @param {Function} effect Effect callback.
+ * @param {Array}    deps   Dependency list.
+ * @return {void}
+ */
 export function useUpdateEffect(effect, deps) {
 	const mounted = useRef(false);
 
@@ -70,6 +98,15 @@ export function useUpdateEffect(effect, deps) {
 	}, deps);
 }
 
+/**
+ * Runs a custom-fields effect after the first render.
+ *
+ * @since 2.0.0
+ *
+ * @param {Function} callback      Effect callback.
+ * @param {Array}    dependencies Dependency list.
+ * @return {void}
+ */
 export function useCustomFields(callback, dependencies) {
 	const firstRenderRef = useRef(true);
 
@@ -82,6 +119,14 @@ export function useCustomFields(callback, dependencies) {
 	}, dependencies);
 }
 
+/**
+ * Formats list IDs as HTML badges for automation step summaries.
+ *
+ * @since 2.0.0
+ *
+ * @param {number[]} lists List IDs.
+ * @return {string|Array} Formatted HTML fragments or a fallback message.
+ */
 export function formatLists(lists) {
 	if (!lists || !lists.length) {
 		return __('No list defined.', 'mailster');
@@ -116,6 +161,14 @@ export function formatLists(lists) {
 	return listStr ? listStr : '';
 }
 
+/**
+ * Formats form IDs as HTML badges for automation step summaries.
+ *
+ * @since 2.0.0
+ *
+ * @param {number[]} forms Form IDs.
+ * @return {string|Array} Formatted HTML fragments or a fallback message.
+ */
 export function formatForms(forms) {
 	if (!forms || !forms.length) {
 		return __('No list defined.', 'mailster');
@@ -150,6 +203,14 @@ export function formatForms(forms) {
 	return formStr ? formStr : '';
 }
 
+/**
+ * Formats tags as HTML badges for automation step summaries.
+ *
+ * @since 2.0.0
+ *
+ * @param {string[]} tags Tag labels.
+ * @return {string|Array} Formatted HTML fragments or a fallback message.
+ */
 export function formatTags(tags) {
 	if (!tags || !tags.length) {
 		return __('No tags defined.', 'mailster');
@@ -164,6 +225,16 @@ export function formatTags(tags) {
 	return tagStr ? tagStr : '';
 }
 
+/**
+ * Builds a human-readable summary for a custom field update step.
+ *
+ * @since 2.0.0
+ *
+ * @param {string|number} field  Field ID or -1 for any field.
+ * @param {*}             value  Field value.
+ * @param {string}        [string] Optional sprintf template override.
+ * @return {string} Formatted summary HTML.
+ */
 export function formatField(field, value, string) {
 	if (!field) {
 		return __('No field defined.', 'mailster');
@@ -242,6 +313,14 @@ export function formatField(field, value, string) {
 	}
 }
 
+/**
+ * Formats page paths as HTML badges for automation step summaries.
+ *
+ * @since 2.0.0
+ *
+ * @param {string[]} pages Page paths or labels.
+ * @return {string|Array} Formatted HTML fragments or a fallback message.
+ */
 export function formatPages(pages) {
 	if (!pages || !pages.length) {
 		return __('No pages defined.', 'mailster');
@@ -258,6 +337,14 @@ export function formatPages(pages) {
 	return pageStr ? pageStr : '';
 }
 
+/**
+ * Formats links as HTML badges for automation step summaries.
+ *
+ * @since 2.0.0
+ *
+ * @param {string[]} links Link URLs or labels.
+ * @return {string|Array} Formatted HTML fragments or a fallback message.
+ */
 export function formatLinks(links) {
 	if (!links || !links.length) {
 		return __('No links defined.', 'mailster');
@@ -272,6 +359,13 @@ export function formatLinks(links) {
 	return linkStr ? linkStr : '';
 }
 
+/**
+ * Resolves when the block editor has content or is a clean new post.
+ *
+ * @since 2.0.0
+ *
+ * @return {Promise<void>} Promise that resolves when the editor is ready.
+ */
 export function whenEditorIsReady() {
 	return new Promise((resolve) => {
 		const unsubscribe = subscribe(() => {
@@ -286,6 +380,15 @@ export function whenEditorIsReady() {
 	});
 }
 
+/**
+ * Persists state in localStorage under a mailster_ prefixed key.
+ *
+ * @since 2.0.0
+ *
+ * @param {string} key          Storage key suffix.
+ * @param {*}      initialValue Fallback when nothing is stored.
+ * @return {[*, Function]} Stored value and setter.
+ */
 export function useLocalStorage(key, initialValue) {
 	key = 'mailster_' + key;
 	// State to store our value
@@ -326,6 +429,15 @@ export function useLocalStorage(key, initialValue) {
 	return [storedValue, setValue];
 }
 
+/**
+ * Persists state in sessionStorage under a mailster_ prefixed key.
+ *
+ * @since 2.0.0
+ *
+ * @param {string} key          Storage key suffix.
+ * @param {*}      initialValue Fallback when nothing is stored.
+ * @return {[*, Function]} Stored value and setter.
+ */
 export function useSessionStorage(key, initialValue) {
 	key = 'mailster_' + key;
 	// State to store our value
@@ -365,6 +477,13 @@ export function useSessionStorage(key, initialValue) {
 	};
 	return [storedValue, setValue];
 }
+/**
+ * Returns viewable post types and select options for automation UI.
+ *
+ * @since 2.0.0
+ *
+ * @return {{postTypesTaxonomiesMap: Object|undefined, postTypesSelectOptions: Array}} Post type helpers.
+ */
 export const usePostTypes = () => {
 	const postTypes = useSelect((select) => {
 		const { getPostTypes } = select('core');
@@ -393,6 +512,14 @@ export const usePostTypes = () => {
 	);
 	return { postTypesTaxonomiesMap, postTypesSelectOptions };
 };
+/**
+ * Loads taxonomies for a post type from the core data store.
+ *
+ * @since 2.0.0
+ *
+ * @param {string} postType Post type slug.
+ * @return {Array|undefined} Taxonomies for the post type.
+ */
 export const useTaxonomies = (postType) => {
 	const taxonomies = useSelect(
 		(select) => {
@@ -408,6 +535,14 @@ export const useTaxonomies = (postType) => {
 	);
 	return taxonomies;
 };
+/**
+ * Builds lookup maps for a list of entities.
+ *
+ * @since 2.0.0
+ *
+ * @param {Array} entities Entities with id and name.
+ * @return {{entities: Array, mapById: Object, mapByName: Object, names: string[]}} Entity maps.
+ */
 export const getEntitiesInfo = (entities) => {
 	const mapping = entities?.reduce(
 		(accumulator, entity) => {
@@ -425,6 +560,16 @@ export const getEntitiesInfo = (entities) => {
 	};
 };
 
+/**
+ * Attaches an event listener with a stable callback ref.
+ *
+ * @since 2.0.0
+ *
+ * @param {string}   eventType Event name.
+ * @param {Function} callback  Event handler.
+ * @param {EventTarget|null} [element=window] Target element.
+ * @return {void}
+ */
 export function useEventListener(eventType, callback, element = window) {
 	const callbackRef = useRef(callback);
 
@@ -441,6 +586,14 @@ export function useEventListener(eventType, callback, element = window) {
 	}, [eventType, element]);
 }
 
+/**
+ * Reads and updates attributes for a block by client ID.
+ *
+ * @since 2.0.0
+ *
+ * @param {string} clientId Block client ID.
+ * @return {[Object, Function]} Attributes and setAttributes callback.
+ */
 export function useBlockAttributes(clientId) {
 	const { updateBlockAttributes } = useDispatch('core/block-editor');
 
@@ -464,6 +617,13 @@ export function useBlockAttributes(clientId) {
 	return [attributes, setAttributes];
 }
 
+/**
+ * Provides attributes helpers for mailster/email blocks in the editor.
+ *
+ * @since 2.0.0
+ *
+ * @return {[Object, Function]} Attributes and setAttributes callback.
+ */
 export function useEmailSteps() {
 	const steps = searchBlocks('mailster/email');
 
@@ -489,6 +649,16 @@ export function useEmailSteps() {
 	return [attributes, setAttributes];
 }
 
+/**
+ * Finds the first matching block by name under a parent client ID.
+ *
+ * @since 2.0.0
+ *
+ * @param {string}  blockName Block name pattern.
+ * @param {string}  clientId  Parent block client ID.
+ * @param {boolean} [deep=true] Search nested blocks.
+ * @return {Object|false} Matching block or false.
+ */
 export function searchBlock(blockName, clientId, deep = true) {
 	const all = select('core/block-editor').getBlocks(clientId);
 
@@ -510,6 +680,16 @@ export function searchBlock(blockName, clientId, deep = true) {
 	return false;
 }
 
+/**
+ * Finds all blocks matching a name under a parent client ID.
+ *
+ * @since 2.0.0
+ *
+ * @param {string}      blockName Exact block name.
+ * @param {string|null} [clientId=null] Parent block client ID.
+ * @param {boolean}     [deep=true] Search nested blocks.
+ * @return {Array} Matching blocks.
+ */
 export function searchBlocks(blockName, clientId = null, deep = true) {
 	const blocks = select('core/block-editor').getBlocks(clientId);
 

@@ -1,12 +1,23 @@
 <?php
+/**
+ * Mailster settings UI for the WooCommerce integration.
+ *
+ * Included from MailsterWooCommerce::settings(); variables are method-local at runtime.
+ *
+ * @since 1.0
+ *
+ * @package EverPress
+ */
 
-$templatefiles = mailster( 'templates' )->get_files( mailster_option( 'default_template' ) );
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals -- View template locals in included scope.
 
-if ( isset( $templatefiles['index.html'] ) ) {
-	unset( $templatefiles['index.html'] );
+$mailster_woocommerce_template_files = mailster( 'templates' )->get_files( mailster_option( 'default_template' ) );
+
+if ( isset( $mailster_woocommerce_template_files['index.html'] ) ) {
+	unset( $mailster_woocommerce_template_files['index.html'] );
 }
 
-$templates = mailster_option( 'woocommerce_templates', array() );
+$mailster_woocommerce_templates = mailster_option( 'woocommerce_templates', array() );
 
 ?>
 
@@ -36,7 +47,7 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_type]">
 			<option value="checkbox" <?php selected( mailster_option( 'woocommerce_type' ), 'checkbox' ); ?>><?php esc_html_e( 'by a checkbox on the checkout page', 'mailster-woocommerce' ); ?></option>
 			<option value="auto" <?php selected( mailster_option( 'woocommerce_type' ), 'auto' ); ?>><?php esc_html_e( 'automatically without checkbox', 'mailster-woocommerce' ); ?></option>
-		</select>		
+		</select>
 		<p>
 		<?php esc_html_e( 'the checkbox position is', 'mailster-woocommerce' ); ?>
 		<select name="mailster_options[woocommerce_checkbox_pos]">
@@ -69,7 +80,7 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<td><label><input type="hidden" name="mailster_options[woocommerce-css]" value="0"><input type="checkbox" name="mailster_options[woocommerce-css]" value="1" <?php checked( mailster_option( 'woocommerce-css' ) ); ?>> <?php esc_html_e( 'Remove WooCommerce styling in emails.', 'mailster-woocommerce' ); ?></label>
 			<p class="description">
 			<?php esc_html_e( 'Removes the WooCommerce style block from the email. This helps your emails look more like the Mailster template.', 'mailster-woocommerce' ); ?>
-		</p</td>
+		</p></td>
 	</tr>
 	<tr valign="top">
 		<th scope="row"><?php esc_html_e( 'Template Files', 'mailster-woocommerce' ); ?>
@@ -82,8 +93,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][new_order]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['new_order'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['new_order'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -94,8 +105,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][cancelled_order]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['cancelled_order'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['cancelled_order'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -106,8 +117,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][refunded_order]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['refunded_order'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['refunded_order'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -118,8 +129,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][processing_order]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['processing_order'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['processing_order'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -130,8 +141,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][completed_order]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['completed_order'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['completed_order'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -142,8 +153,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][invoice]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['invoice'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['invoice'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -154,8 +165,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][note]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['note'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['note'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -166,8 +177,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][reset_password]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['reset_password'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['reset_password'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -178,8 +189,8 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 		<select name="mailster_options[woocommerce_templates][new_account]" class="postform">
 			<option value="0"><?php esc_html_e( 'Default', 'mailster-woocommerce' ); ?></option>
 
-			<?php foreach ( $templatefiles as $slug => $filedata ) : ?>
-			<option value="<?php echo $slug; ?>"<?php selected( $slug == $templates['new_account'] ); ?>><?php echo esc_attr( $filedata['label'] ); ?> (<?php echo $slug; ?>)</option>
+			<?php foreach ( $mailster_woocommerce_template_files as $mailster_woocommerce_slug => $mailster_woocommerce_filedata ) : ?>
+			<option value="<?php echo esc_attr( $mailster_woocommerce_slug ); ?>"<?php selected( $mailster_woocommerce_templates['new_account'], $mailster_woocommerce_slug ); ?>><?php echo esc_html( $mailster_woocommerce_filedata['label'] ); ?> (<?php echo esc_html( $mailster_woocommerce_slug ); ?>)</option>
 		<?php endforeach; ?>
 
 		</select>
@@ -194,3 +205,5 @@ $templates = mailster_option( 'woocommerce_templates', array() );
 	</tr>
 
 </table>
+<?php
+// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals

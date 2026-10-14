@@ -21,22 +21,54 @@ const FETCH_PRODUCTS_SUCCESS = 'FETCH_PRODUCTS_SUCCESS';
 const FETCH_PRODUCTS_ERROR = 'FETCH_PRODUCTS_ERROR';
 
 // Actions
+/**
+ * Dispatches a products fetch request for the given IDs.
+ *
+ * @since 2.0.0
+ *
+ * @param {number[]} [productIds=[]] Product IDs to include.
+ * @return {Object} Redux-style action.
+ */
 export const fetchProducts = (productIds = []) => ({
 	type: FETCH_PRODUCTS,
 	productIds,
 });
 
+/**
+ * Dispatches a successful products fetch result.
+ *
+ * @since 2.0.0
+ *
+ * @param {Array} products Fetched products.
+ * @return {Object} Redux-style action.
+ */
 export const fetchProductsSuccess = (products) => ({
 	type: FETCH_PRODUCTS_SUCCESS,
 	products,
 });
 
+/**
+ * Dispatches a products fetch error.
+ *
+ * @since 2.0.0
+ *
+ * @param {*} error Fetch error.
+ * @return {Object} Redux-style action.
+ */
 export const fetchProductsError = (error) => ({
 	type: FETCH_PRODUCTS_ERROR,
 	error,
 });
 
 // Controls
+/**
+ * Fetches products from the WooCommerce REST API.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object} action Action containing productIds.
+ * @return {Promise} API fetch promise.
+ */
 const fetchProductsControl = (action) => {
 	const { productIds } = action;
 	const queryArgs = productIds.length ? { exclude: productIds } : {};
@@ -55,6 +87,15 @@ const initialState = {
 	error: null,
 };
 
+/**
+ * Reduces product store state.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object} state  Current state.
+ * @param {Object} action Dispatched action.
+ * @return {Object} Next state.
+ */
 const reducer = (state = initialState, action) => {
 	switch (action.type) {
 		case FETCH_PRODUCTS:

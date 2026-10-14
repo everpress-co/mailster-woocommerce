@@ -23,6 +23,11 @@ import CategorySelector from './CategorySelector';
 import ProductTrigger from './ProductTrigger';
 import CategoryTrigger from './CategoryTrigger';
 
+/**
+ * Registers the WooCommerce trigger plugin fills for Mailster workflows.
+ *
+ * @since 2.0.0
+ */
 registerPlugin('mailster-woocommerce-trigger', {
 	render: () => {
 		// get all trigger blocks
@@ -63,6 +68,14 @@ registerPlugin('mailster-woocommerce-trigger', {
 });
 
 // add custom attributes to trigger block
+/**
+ * Adds WooCommerce-specific attributes to the Mailster workflow trigger block.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object} settings Block type settings.
+ * @return {Object} Filtered block type settings.
+ */
 addFilter(
 	'blocks.registerBlockType',
 	'mailster-woocommerce/attributes',

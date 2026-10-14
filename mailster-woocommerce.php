@@ -1,4 +1,11 @@
 <?php
+/**
+ * Plugin bootstrap for Mailster for WooCommerce.
+ *
+ * @since 1.0
+ *
+ * @package EverPress
+ */
 
 namespace EverPress;
 
