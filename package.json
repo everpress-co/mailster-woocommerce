@@ -31,7 +31,7 @@
 		"readme.txt"
 	],
 	"dependencies": {
-		"@wordpress/components": "^28.13.0",
+		"@wordpress/components": "^42.0.0",
 		"@wordpress/compose": "^7.13.0",
 		"@wordpress/core-data": "^7.13.0",
 		"@wordpress/data": "^10.13.0",
