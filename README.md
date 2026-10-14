@@ -3,7 +3,7 @@
 Contributors: everpress, mailster, xaverb  
 Tags: mailster, woocommerce, newsletter, ecommerce, checkout  
 Requires at least: 6.2  
-Tested up to: 6.7  
+Tested up to: 7.1  
 Stable tag: 2.0.2  
 Requires PHP: 7.4  
 License: GPLv2 or later
@@ -98,8 +98,6 @@ See the [Mailster and WooCommerce](https://kb.mailster.co/mailster-and-woocommer
 ![Example Checkbox on Checkout](https://ps.w.org/mailster-woocommerce/assets/screenshot-3.png)
 
 ## Changelog
-
-### Unreleased
 
 ### 2.0.2
 
