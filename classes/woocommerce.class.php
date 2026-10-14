@@ -1,4 +1,10 @@
 <?php
+/**
+ * Mailster WooCommerce integration class.
+ *
+ * @package EverPress
+ * @since 1.0
+ */
 
 namespace EverPress;
 
@@ -113,8 +119,11 @@ class MailsterWooCommerce {
 
 		if ( mailster_option( 'woocommerce-skip-user' ) ) {
 
-			if ( is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
-				return;
+			if ( is_user_logged_in() ) {
+				$subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() );
+				if ( $subscriber ) {
+					return;
+				}
 			}
 
 			if ( mailster_get_current_user_id() ) {
@@ -122,7 +131,7 @@ class MailsterWooCommerce {
 			}
 		}
 
-		// get the location from the legacy method
+		// Map legacy checkbox position to block checkout location.
 		switch ( mailster_option( 'woocommerce_checkbox_pos', 'after_customer_details' ) ) {
 			case 'before_order_review':
 			case 'after_order_review':
@@ -160,7 +169,7 @@ class MailsterWooCommerce {
 	 * @return MailsterWooCommerce Instance.
 	 */
 	public static function get_instance() {
-		if ( self::$instance == null ) {
+		if ( null === self::$instance ) {
 			self::$instance = new MailsterWooCommerce();
 		}
 
@@ -218,6 +227,7 @@ class MailsterWooCommerce {
 	public function get_mailster_settings() {
 
 		return apply_filters(
+			// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Legacy WooCommerce filter name.
 			'woocommerce_mailster_settings',
 			array(
 				array(
@@ -316,7 +326,7 @@ class MailsterWooCommerce {
 	 */
 	public function save_product( $post_id, $post ) {
 
-		if ( empty( $post ) || $post->post_type != 'product' ) {
+		if ( empty( $post ) || 'product' !== $post->post_type ) {
 			return;
 		}
 
@@ -328,11 +338,12 @@ class MailsterWooCommerce {
 			return;
 		}
 
-		if ( ! wp_verify_nonce( $_POST['mailster_woocommerce_lists_nonce'], 'mailster_woocommerce_lists_nonce' ) ) {
+		$nonce = isset( $_POST['mailster_woocommerce_lists_nonce'] ) ? sanitize_text_field( wp_unslash( $_POST['mailster_woocommerce_lists_nonce'] ) ) : '';
+		if ( ! wp_verify_nonce( $nonce, 'mailster_woocommerce_lists_nonce' ) ) {
 			return;
 		}
 
-		$lists = isset( $_POST['mailster_lists'] ) ? (array) $_POST['mailster_lists'] : array();
+		$lists = isset( $_POST['mailster_lists'] ) ? array_map( 'sanitize_text_field', wp_unslash( (array) $_POST['mailster_lists'] ) ) : array();
 		update_post_meta( $post_id, '_mailster_lists', $lists );
 	}
 
@@ -388,6 +399,7 @@ class MailsterWooCommerce {
 	 */
 	public function on_checkout( $order_id ) {
 
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce before this hook.
 		if ( ( 'checkbox' == mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ) )
 			|| 'auto' == mailster_option( 'woocommerce_type' ) ) {
 
@@ -432,7 +444,7 @@ class MailsterWooCommerce {
 
 		$value = $order->get_meta( '_wc_other/mailster/subscribe' );
 
-		// always signup if auto is enabled
+		// Always signup if auto is enabled.
 		if ( 'auto' == mailster_option( 'woocommerce_type' ) ) {
 			$value = true;
 		}
@@ -459,7 +471,7 @@ class MailsterWooCommerce {
 	 */
 	public function subscribe( $order_id ) {
 
-		// get order by id
+		// Get order by ID.
 		$order = wc_get_order( $order_id );
 
 		if ( ! $order ) {
@@ -485,7 +497,8 @@ class MailsterWooCommerce {
 			}
 		}
 
-		if ( $subscriber = mailster( 'subscribers' )->get_by_mail( $email ) ) {
+		$subscriber = mailster( 'subscribers' )->get_by_mail( $email );
+		if ( $subscriber ) {
 			$subscriber_id = $subscriber->ID;
 		} else {
 
@@ -499,8 +512,11 @@ class MailsterWooCommerce {
 
 			$synclist = mailster_option( 'sync' ) ? mailster_option( 'synclist', array() ) : array();
 			foreach ( $synclist as $usermeta => $field ) {
-				if ( method_exists( $order, 'get_' . $field ) && $value = call_user_func( array( $order, 'get_' . $field ) ) ) {
-					$user_data[ $usermeta ] = $value;
+				if ( method_exists( $order, 'get_' . $field ) ) {
+					$value = call_user_func( array( $order, 'get_' . $field ) );
+					if ( $value ) {
+						$user_data[ $usermeta ] = $value;
+					}
 				}
 			}
 
@@ -536,9 +552,10 @@ class MailsterWooCommerce {
 			if ( isset( $customer ) && $customer['email'] ) {
 				$subscriber = mailster( 'subscribers' )->get_by_mail( $customer['email'] );
 			}
-			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() && $subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() ) ) {
-				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
-			} elseif ( $subscriber ) {
+			if ( mailster_option( 'woocommerce-skip-user' ) && is_user_logged_in() ) {
+				$subscriber = mailster( 'subscribers' )->get_by_wpid( get_current_user_id() );
+			}
+			if ( $subscriber ) {
 				echo '<div class="mailster-signup"><input id="wc_mailster_signup" name="mailster_signup" type="hidden" value="1"></div>';
 			} else {
 				echo '<div class="mailster-signup"><label for="wc_mailster_signup" class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox"><input id="wc_mailster_signup" name="mailster_signup" class="woocommerce-form__input-checkbox" type="checkbox"> <span>' . esc_html( mailster_option( 'woocommerce_label' ) ) . '</span></label></div>';
@@ -601,8 +618,10 @@ class MailsterWooCommerce {
 				break;
 
 			case 'woocommerce_process_shop_order_meta':
+				// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the order meta nonce before this hook.
 				if ( isset( $_POST['wc_order_action'] ) ) {
-					switch ( $_POST['wc_order_action'] ) {
+					// phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- WC admin order action; nonce verified by WooCommerce.
+					switch ( wp_unslash( $_POST['wc_order_action'] ) ) {
 						case 'send_email_new_order':
 							$file = isset( $templates['new_order'] ) ? $templates['new_order'] : $file;
 							break;
@@ -635,13 +654,13 @@ class MailsterWooCommerce {
 	 *
 	 * @since 1.0
 	 *
-	 * @param WC_Emails $wooEmailObj WooCommerce emails instance.
+	 * @param WC_Emails $woo_email_obj WooCommerce emails instance.
 	 * @return void
 	 */
-	public function remove_header_and_footer( $wooEmailObj ) {
+	public function remove_header_and_footer( $woo_email_obj ) {
 		if ( mailster_option( 'system_mail' ) ) {
-			remove_action( 'woocommerce_email_header', array( $wooEmailObj, 'email_header' ) );
-			remove_action( 'woocommerce_email_footer', array( $wooEmailObj, 'email_footer' ) );
+			remove_action( 'woocommerce_email_header', array( $woo_email_obj, 'email_header' ) );
+			remove_action( 'woocommerce_email_footer', array( $woo_email_obj, 'email_footer' ) );
 		}
 	}
 
@@ -657,7 +676,7 @@ class MailsterWooCommerce {
 	public function add_woocommerce_post_types( $post_types, $output = 'names' ) {
 		global $wp_post_types;
 
-		if ( $output === 'names' ) {
+		if ( 'names' === $output ) {
 			$post_types[] = 'shop_coupon';
 		} elseif ( isset( $wp_post_types['shop_coupon'] ) ) {
 			$post_types['shop_coupon'] = $wp_post_types['shop_coupon'];
@@ -715,7 +734,12 @@ class MailsterWooCommerce {
 	public function notice() {
 
 		?>
-		<div class="error"><p><strong><?php printf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' ); ?></strong></p></div>
+		<div class="error"><p><strong>
+		<?php
+		/* translators: %s: link to the Mailster plugin */
+		printf( esc_html__( 'You have to enable the %s to use Mailster for WooCommerce!', 'mailster-woocommerce' ), '<a href="https://evp.to/mailster?utm_campaign=plugin&utm_medium=link&utm_source=WooCommerce">Mailster Newsletter Plugin</a>' );
+		?>
+		</strong></p></div>
 		<?php
 	}
 

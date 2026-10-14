@@ -28,6 +28,7 @@
 			<property name="prefixes" type="array">
 				<element value="mailster"/>
 				<element value="mailster_woocommerce"/>
+				<element value="EverPress"/>
 			</property>
 		</properties>
 	</rule>
