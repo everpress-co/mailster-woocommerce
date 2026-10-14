@@ -400,12 +400,12 @@ class MailsterWooCommerce {
 	public function on_checkout( $order_id ) {
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing -- WooCommerce verifies the checkout nonce before this hook.
-		if ( ( 'checkbox' == mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ) )
-			|| 'auto' == mailster_option( 'woocommerce_type' ) ) {
+		if ( ( 'checkbox' === mailster_option( 'woocommerce_type' ) && isset( $_POST['mailster_signup'] ) )
+			|| 'auto' === mailster_option( 'woocommerce_type' ) ) {
 
-			if ( 'completed' == mailster_option( 'woocommerce_action' ) ) {
+			if ( 'completed' === mailster_option( 'woocommerce_action' ) ) {
 				add_post_meta( $order_id, 'mailster_signup', true, true );
-			} elseif ( 'created' == mailster_option( 'woocommerce_action' ) ) {
+			} elseif ( 'created' === mailster_option( 'woocommerce_action' ) ) {
 				$this->subscribe( $order_id );
 			}
 		}
@@ -445,7 +445,7 @@ class MailsterWooCommerce {
 		$value = $order->get_meta( '_wc_other/mailster/subscribe' );
 
 		// Always signup if auto is enabled.
-		if ( 'auto' == mailster_option( 'woocommerce_type' ) ) {
+		if ( 'auto' === mailster_option( 'woocommerce_type' ) ) {
 			$value = true;
 		}
 
@@ -454,9 +454,9 @@ class MailsterWooCommerce {
 		}
 
 		$action = mailster_option( 'woocommerce_action' );
-		if ( 'completed' == $action ) {
+		if ( 'completed' === $action ) {
 			$order->update_meta_data( 'mailster_signup', true, true );
-		} elseif ( 'created' == $action ) {
+		} elseif ( 'created' === $action ) {
 			$this->subscribe( $order_id );
 		}
 	}
@@ -541,11 +541,11 @@ class MailsterWooCommerce {
 	 */
 	public function checkbox() {
 
-		if ( 'auto' == mailster_option( 'woocommerce_type' ) ) {
+		if ( 'auto' === mailster_option( 'woocommerce_type' ) ) {
 			return;
 		}
 
-		if ( 'checkbox' == mailster_option( 'woocommerce_type' ) ) {
+		if ( 'checkbox' === mailster_option( 'woocommerce_type' ) ) {
 
 			$customer   = WC()->session->get( 'customer' );
 			$subscriber = null;

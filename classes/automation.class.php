@@ -115,6 +115,8 @@ class MailsterWooCommerceAutomation {
 	 */
 	public function order_status_changed( $order_id, $status_transition_from, $status_transition_to, $that ) {
 
+		unset( $that );
+
 		$order = wc_get_order( $order_id );
 
 		// Get products from the order.
