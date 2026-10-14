@@ -15,6 +15,15 @@ import { __ } from '@wordpress/i18n';
 import { ORDER_STATUS } from './constants';
 import { useCategories } from './functions';
 
+/**
+ * Read-only summary of the category purchase trigger step.
+ *
+ * @since 2.0.0
+ *
+ * @param {Object} props            Block edit props.
+ * @param {Object} props.attributes Trigger block attributes.
+ * @return {JSX.Element|null} Step summary, or null while loading.
+ */
 export default function Trigger(props) {
 	const { attributes, setAttributes } = props;
 

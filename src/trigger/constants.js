@@ -12,6 +12,13 @@ import { _x } from '@wordpress/i18n';
  * Internal dependencies
  */
 
+/**
+ * WooCommerce order statuses available for automation triggers.
+ *
+ * @since 2.0.0
+ *
+ * @type {Array<{name: string, id: string}>}
+ */
 export const ORDER_STATUS = [
 	{
 		name: _x('Pending payment', 'Order status', 'mailster-woocommerce'),
